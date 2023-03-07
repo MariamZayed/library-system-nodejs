@@ -39,3 +39,5 @@ const Schema=new mongoose.Schema({
     image : { type:Image },
     salary : { type:Number, require:true }
 })
+
+mongoose.model("admins",schema); //new name for model
