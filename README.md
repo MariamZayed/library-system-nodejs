@@ -7,4 +7,5 @@ ITI 9 months nodejs project supervised by Eng. Eman Fathi
 3- Install nodemon globally <code>npm i nodemon -g</code> <br>
 4- Install express-validator <code>npm i express-validator</code> <br>
 5- Install morgan <code>npm i morgan </code><br>
-5- Install mongoose  <code>npm i mongoose</code> <br>
+6- Install mongoose <code>npm i mongoose</code> <br>
+7- Install bcrypt <code>npm i bcrypt</code> <br>
