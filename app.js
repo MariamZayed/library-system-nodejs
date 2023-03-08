@@ -9,19 +9,8 @@ const port = process.env.PORT || 8080;
 
 mongoose.set("strictQuery",false)
 
-// const start = async()=>{
-//     try{
-//         await mongoose.connect('mongodb+srv://nodejs:antilotfi43@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority');
-//         console.log("database connected");
-//         app.listen(port,()=>{
-//             console.log("server connected....");
-//         })
-//     } catch(e){
-//         console.log(e.message);
-//     }
-// };
 
-mongoose.connect('mongodb+srv://nodejs:antilotfi43@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
     .then(() => {
         console.log("database connected");
         app.listen(port,()=>{
@@ -34,9 +23,6 @@ mongoose.connect('mongodb+srv://nodejs:antilotfi43@librarynodejs.ym4zs66.mongodb
     app.use(cors());
     app.use(express.json());
     app.use(adminRoute);
-
-    
-
 
     app.use((request,response)=>{
         response.status(404).json({message:"Not Found"});
