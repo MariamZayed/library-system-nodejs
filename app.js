@@ -1,13 +1,11 @@
 const express=require("express")
 const mongoose=require("mongoose")
+const cors=require("cors")
 const app=express()
+const port = process.env.PORT || 8080;
+mongoose.set("strictQuery",false)
 const adminRoute = require("./Routes/adminRoute");
 
-const cors=require("cors")
-const port = process.env.PORT || 8080;
-
-
-mongoose.set("strictQuery",false)
 
 mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
     .then(() => {
