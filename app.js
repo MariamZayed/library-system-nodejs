@@ -9,17 +9,14 @@ const port = process.env.PORT || 8080;
 
 mongoose.set("strictQuery",false)
 
-const start = async()=>{
-    try{
-        await mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
+    .then(() => {
         console.log("Database Connected...");
         app.listen(port,()=>{
             console.log("server is listenng... ",port);
         })
-    } catch(e){
-        console.log(e.message);
-    }
-};
+    })
+    .catch((error)=> console.log(`DB connection error ${error}`))
 
     app.use(cors());
     app.use(express.json());
