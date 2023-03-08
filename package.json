@@ -1,6 +1,30 @@
 {
+  "name": "library-system-nodejs",
+  "version": "1.0.0",
+  "description": "ITI 9 months nodejs project supervised by Eng. Eman Fathi",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MariamZayed/library-system-nodejs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MariamZayed/library-system-nodejs/issues"
+  },
+  "homepage": "https://github.com/MariamZayed/library-system-nodejs#readme",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "express-validator": "^6.15.0",
+    "mongoose": "^7.0.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1"
   }
 }

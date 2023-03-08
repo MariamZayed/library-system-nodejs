@@ -1,13 +1,27 @@
 const express=require("express")
 const mongoose=require("mongoose")
 const app=express()
+const adminRoute = require("./Routes/adminRoute");
 
 const cors=require("cors")
 const port = process.env.PORT || 8080;
 
 
-mongoose.set("strictQuery",true)
-mongoose.connect('mongodb://127.0.0.1:27017/library')
+mongoose.set("strictQuery",false)
+
+// const start = async()=>{
+//     try{
+//         await mongoose.connect('mongodb+srv://nodejs:antilotfi43@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority');
+//         console.log("database connected");
+//         app.listen(port,()=>{
+//             console.log("server connected....");
+//         })
+//     } catch(e){
+//         console.log(e.message);
+//     }
+// };
+
+mongoose.connect('mongodb+srv://nodejs:antilotfi43@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
     .then(() => {
         console.log("database connected");
         app.listen(port,()=>{
@@ -19,16 +33,16 @@ mongoose.connect('mongodb://127.0.0.1:27017/library')
 
     app.use(cors());
     app.use(express.json());
-
+    app.use(adminRoute);
 
     
 
 
-    server.use((request,response)=>{
+    app.use((request,response)=>{
         response.status(404).json({message:"Not Found"});
     });
     
     //Middlewre 3--- Error ----
-    server.use((error,request,response,next)=>{
+    app.use((error,request,response,next)=>{
         response.status(500).json({message:error+""})
     });
