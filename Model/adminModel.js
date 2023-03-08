@@ -3,7 +3,7 @@ const mongoose=require("mongoose")
 const Schema=new mongoose.Schema({
     _id: { type:Number },
     firstName:{
-        type: string,
+        type:String,
         validate: {
             validator: function (v) {
             return /^[a-zA-Z0-9 ]*$/.test(v);
@@ -13,7 +13,7 @@ const Schema=new mongoose.Schema({
         required: [true, "Title is required"],
     },
     lastName :{
-        type: string,
+        type: String,
         required: [true, "Title is required"],
         validate: {
             validator: function (v) {
@@ -36,8 +36,8 @@ const Schema=new mongoose.Schema({
     },
     birthdate : { type:Date },
     hireDate : { type:Date, require:true },
-    image : { type:Image },
+    image : { type:String },
     salary : { type:Number, require:true }
 })
 
-mongoose.model("admins",schema); //new name for model
+mongoose.model("admins",Schema); //new name for model
