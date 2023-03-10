@@ -9,3 +9,4 @@ ITI 9 months nodejs project supervised by Eng. Eman Fathi
 5- Install morgan <code>npm i morgan </code><br>
 6- Install mongoose <code>npm i mongoose</code> <br>
 7- Install bcrypt <code>npm i bcrypt</code> <br>
+8- <code> npm i mongoose-sequence</code>
