@@ -7,7 +7,6 @@ exports.post = [
     body("email").isEmail().withMessage("Invalid Email Format"),
     body("birthdate").isDate().withMessage("Invalid Date"),
     body("hireDate").isDate().withMessage("Invalid Hire Date"),
-    body("image").isString().withMessage(" Invalid Image"),
     body("salary").isNumeric().withMessage("Salary Must be Number"),
 ];
 
@@ -18,7 +17,6 @@ exports.update = [
     body("email").optional().isEmail().withMessage("Invalid Email Format"),
     body("birthdate").optional().isDate().withMessage("Invalid Date"),
     body("hireDate").optional().isDate().withMessage("Invalid Hire Date"),
-    body("image").optional().isString().withMessage("Invalid Image"),
     body("salary").optional().isNumeric().withMessage("Salary Must be Number")
 ];
 

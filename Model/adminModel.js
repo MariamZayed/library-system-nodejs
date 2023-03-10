@@ -1,7 +1,7 @@
 const mongoose=require("mongoose")
 
 const Schema=new mongoose.Schema({
-    _id: { type:Number },
+    _id: mongoose.Schema.Types.ObjectId,
     firstName:{
         type:String,
         validate: {

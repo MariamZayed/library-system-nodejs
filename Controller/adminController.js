@@ -1,13 +1,16 @@
 const mongoose=require("mongoose");
-require("./../Model/adminModel"); 
+require("./../Model/adminModel");
+const fs =require("fs") 
 const bcrypt = require("bcrypt");
+const path = require("path");
+const { text } = require("express");
 const saltRounds = 10
 const salt = bcrypt.genSaltSync(saltRounds);
 
 //getter
 const adminSchema = mongoose.model("admins");
 
-exports.getAllteachers=(request,response)=>{
+exports.getAllAdmins=(request,response)=>{
     adminSchema.find({})
                 .then((data)=>{
                     response.status(200).json({data});        
@@ -36,26 +39,37 @@ exports.addAdmin=(request,response,next)=>{
 }
 
 exports.updateAdmin=(request,response,next)=>{
-    adminSchema.updateOne({
+    adminSchema.findOne({
         _id:request.body.id
-    },{
-        $set:{
-            firstName:request.body.firstName,
-            lastName:request.body.lastName,
-            password: password,
-            email:request.body.email,
-            birthdate:request.body.birthdate,
-            hireDate:request.body.hireDate,
-            salary:request.body.salary,
-            image:request.file.path
+    }).then((data)=>{
+        console.log(data);
+        if(!data){
+            throw new Error("Admin not found ts");
+        }else{//for admin role
+            
         }
-    }).then(data=>{
-        if(data.matchedCount==0)
-            next(new Error("Teacher not Found"));
-        else
-            response.status(200).json({data});
+        if(request.file){
+            console.log(data)
+            fs.unlinkSync(data.image);
+        }   
+        return adminSchema.updateOne({//Use return because use of two query actions 
+            _id:request.body.id
+        },{
+            $set:{
+                lastName:request.body.lastName,
+                password:request.body.password,
+                email:request.body.email,
+                birthdate:request.body.birthdate,
+                hireDate:request.body.hireDate,
+                salary:request.body.salary,
+                image:request.file.filename 
+            }
+        })   
     })
-    .catch(error=>next(error));
+    .then(data=>{
+                response.status(200).json({data});
+        })
+        .catch(error=>next(error));
 }
 
 exports.deleteAdmin=(request,response,next)=>{

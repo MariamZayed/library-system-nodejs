@@ -1,16 +1,16 @@
 const express=require("express")
 const mongoose=require("mongoose")
-const app=express()
-const adminRoute = require("./Routes/adminRoute");
-
 const cors=require("cors")
+const morgan = require("morgan");
+const fs = require("fs");
+const app=express()
 const port = process.env.PORT || 8080;
-
-
 mongoose.set("strictQuery",false)
 
+const adminRoute = require("./Routes/adminRoute");
 
-mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
+// mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect("mongodb://127.0.0.1:27017/library")
     .then(() => {
         console.log("database connected");
         app.listen(port,()=>{
@@ -19,7 +19,13 @@ mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mo
     })
     .catch((error)=> console.log(`DB connection error ${error}`))
 
-
+    app.use(
+        morgan("tiny", {
+        stream: fs.createWriteStream("./log.log", {
+            flags: "a", // appending
+        }),
+        })
+    );
     app.use(cors());
     app.use(express.json());
     app.use(adminRoute);

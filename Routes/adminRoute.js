@@ -1,6 +1,6 @@
 const express=require("express")
 const router = express.Router();    
-const childValidation = require("../Core/Validation/adminvalidation");
+const adminvalidation = require("../Core/Validation/adminValidation");
 const validateMW = require("../Core/Validation/validateMW");
 const controller = require("../Controller/adminController");
 const multer = require("multer");
@@ -29,9 +29,9 @@ const upload = multer({
 
 router
     .route("/admin")
-    .get(controller.getAllteachers)
-    .post(upload.single('image'),childValidation.post, validateMW ,controller.addAdmin)
-    .patch(upload.single('image'),childValidation.update ,validateMW ,controller.updateAdmin)
-    .delete(childValidation.delete ,validateMW ,controller.deleteAdmin);
+    .get(controller.getAllAdmins)
+    .post(upload.single('image'),adminvalidation.post, validateMW ,controller.addAdmin)
+    .patch(upload.single('image'),adminvalidation.update ,validateMW ,controller.updateAdmin)
+    .delete(adminvalidation.delete ,validateMW ,controller.deleteAdmin);
 
 module.exports = router;
