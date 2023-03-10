@@ -11,7 +11,7 @@ exports.post = [
 ];
 
 exports.update = [
-    body("id").isMongoId().withMessage("Id Shoud be Object"),
+    body("id").isNumeric().withMessage("Id Shoud be Number"),
     body("lastName").optional().isString().withMessage("Last Name must be string"),
     body("password").optional().isLength({min: 8}).withMessage("Password Must be Min length 8"),
     body("email").optional().isEmail().withMessage("Invalid Email Format"),
@@ -21,5 +21,5 @@ exports.update = [
 ];
 
 exports.delete = [
-    body("id").isMongoId().withMessage("Id Shoud be Object"),
+    body("id").isNumeric().withMessage("Id Shoud be Number"),
 ]
