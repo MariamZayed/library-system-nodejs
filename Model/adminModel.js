@@ -1,7 +1,8 @@
 const mongoose=require("mongoose")
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const Schema=new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
+   _id: Number,
     firstName:{
         type:String,
         validate: {
@@ -39,5 +40,10 @@ const Schema=new mongoose.Schema({
     image : { type:String },
     salary : { type:Number, require:true }
 })
+
+Schema.plugin(AutoIncrement,{
+    id: 'adminCounter',
+    inc_field: "_id"
+});
 
 mongoose.model("admins",Schema); //new name for model
