@@ -7,6 +7,6 @@ ITI 9 months nodejs project supervised by Eng. Eman Fathi
 3- Install nodemon globally <code>npm i nodemon -g</code> <br>
 4- Install express-validator <code>npm i express-validator</code> <br>
 5- Install morgan <code>npm i morgan </code><br>
-6- Install mongoose <code>npm i mongoose</code> <br>. Any version lower than 7 so to be compatible with mongoose-sequence lib
+6- Install mongoose <code>npm i mongoose</code> <br>. Any version but not 7.0.0 so to be compatible with mongoose-sequence lib
 7- <code>npm i mongoose-sequence</code> to autoincreamnt id 
 8- Install bcrypt <code>npm i bcrypt</code> <br> to incode password
