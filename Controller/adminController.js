@@ -22,7 +22,6 @@ exports.getAllAdmins=(request,response)=>{
 
 exports.addAdmin=(request,response,next)=>{
     new adminSchema({
-        _id: new mongoose.Types.ObjectId(),
         firstName:request.body.firstName,
         lastName:request.body.lastName,
         password: bcrypt.hashSync(request.body.password, salt),
@@ -49,8 +48,7 @@ exports.updateAdmin=(request,response,next)=>{
             
         }
         if(request.file){
-            console.log(data)
-            fs.unlinkSync(data.image);
+            fs.unlinkSync(path.join(__dirname,"..","images","admin",`${data.image}`));
         }   
         return adminSchema.updateOne({//Use return because use of two query actions 
             _id:request.body.id
