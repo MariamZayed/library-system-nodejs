@@ -10,8 +10,9 @@ ITI 9 months nodejs project supervised by Eng. Eman Fathi
 4- Install express-validator <code>npm i express-validator</code> <br>
 5- Install morgan <code>npm i morgan </code><br>
 6- Install mongoose <code>npm i mongoose</code> <br>. Any version but not 7.0.0 so to be compatible with mongoose-sequence lib <br>
-7- <code>npm i mongoose-sequence</code> to autoincreamnt id 
-8- Install bcrypt <code>npm i bcrypt</code> <br> to incode password
+7- <code>npm i mongoose-sequence</code> to autoincreamnt id <br>
+8- Install bcrypt <code>npm i bcrypt</code> <br> to incode password<br>
+9- Instal fs <code>install i fs</code><br>
 
 ### installing required packages
 
