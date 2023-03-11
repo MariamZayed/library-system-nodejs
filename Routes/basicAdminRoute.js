@@ -1,8 +1,8 @@
 const express=require("express")
 const router = express.Router();    
-const adminvalidation = require("../Core/Validation/adminValidation");
+const basicAdminvalidation = require("../Core/Validation/basicAdminValidation");
 const validateMW = require("../Core/Validation/validateMW");
-const controller = require("../Controller/adminController");
+const controller = require("../Controller/basicAdminController");
 const multer = require("multer");
 const path = require("path");
 
@@ -16,7 +16,7 @@ const upload = multer({
     } ,
     storage: multer.diskStorage({
         destination:(request, file, cb) => {
-            cb(null, path.join(__dirname,"..","images","admin"));
+            cb(null, path.join(__dirname,"..","images","basicAdmin"));
         },
         filename: (request, file, cb) => {
             let ext = path.extname(file.originalname);
@@ -28,10 +28,10 @@ const upload = multer({
 });
 
 router
-    .route("/admin")
-    .get(controller.getAllAdmins)
-    .post(upload.single('image'),adminvalidation.post, validateMW ,controller.addAdmin)
-    .patch(upload.single('image'),adminvalidation.update ,validateMW ,controller.updateAdmin)
-    .delete(adminvalidation.delete ,validateMW ,controller.deleteAdmin);
+    .route("/basicAdmin")
+    .get(controller.getAllBasicAdmins)
+    .post(upload.single('image'),basicAdminvalidation.post, validateMW ,controller.addBasicAdmin)
+    .patch(upload.single('image'),basicAdminvalidation.update ,validateMW ,controller.updateBasicAdmin)
+    .delete(basicAdminvalidation.delete ,validateMW ,controller.deleteBasicAdmin);
 
 module.exports = router;
