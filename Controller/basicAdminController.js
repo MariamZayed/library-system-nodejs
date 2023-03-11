@@ -1,17 +1,16 @@
 const mongoose=require("mongoose");
-require("../Model/adminModel");
+require("../Model/basicAdminModel");
 const fs =require("fs") 
 const bcrypt = require("bcrypt");
 const path = require("path");
-const { EventEmitter } = require("stream");
 const saltRounds = 10
 const salt = bcrypt.genSaltSync(saltRounds);
 
 //getter
-const adminSchema = mongoose.model("admins");
+const basicAdminSchema = mongoose.model("basicAdmins");
 
-exports.getAllAdmins=(request,response)=>{
-    adminSchema.find({})
+exports.getAllBasicAdmins=(request,response)=>{
+    basicAdminSchema.find({})
                 .then((data)=>{
                     response.status(200).json({data});        
                 })
@@ -20,9 +19,8 @@ exports.getAllAdmins=(request,response)=>{
                 })
 }
 
-exports.addAdmin=async(request,response,next)=>{
-    
-    new adminSchema({
+exports.addBasicAdmin=(request,response,next)=>{
+    new basicAdminSchema({
         firstName:request.body.firstName,
         lastName:request.body.lastName,
         password: bcrypt.hashSync(request.body.password, salt),
@@ -33,27 +31,27 @@ exports.addAdmin=async(request,response,next)=>{
         image:request.file.path
     }).save()// insertOne
     .then(data=>{
-        console.log(data)
         response.status(201).json({data});
     })
     .catch(error=>next(error));
 }
 
-exports.updateAdmin=(request,response,next)=>{
-    adminSchema.findOne({
+exports.updateBasicAdmin=(request,response,next)=>{
+    basicAdminSchema.findOne({
         _id:request.body.id
     }).then((data)=>{
         if(!data){
-            throw new Error(" Admin not found ts");
+            throw new Error("basic Admin not found ts");
+        }else{//for basicAdmin role
+            
         }
-        if(request.file && data.image){
-            fs.unlinkSync(path.join(__dirname,"..","images","admin",`${data.image}`));
+        if(request.file){
+            fs.unlinkSync(data.image);
         }   
-        return adminSchema.updateOne({//Use return because use of two query actions 
+        return basicAdminSchema.updateOne({//Use return because use of two query actions 
             _id:request.body.id
         },{
             $set:{
-                firstName:request.body.firstName,
                 lastName:request.body.lastName,
                 password:request.body.password,
                 email:request.body.email,
@@ -70,8 +68,8 @@ exports.updateAdmin=(request,response,next)=>{
         .catch(error=>next(error));
 }
 
-exports.deleteAdmin=(request,response,next)=>{
-    adminSchema.deleteOne({
+exports.deleteBasicAdmin=(request,response,next)=>{
+    basicAdminSchema.deleteOne({
         _id:request.body.id
     }).then(data=>{
         response.status(200).json({data});

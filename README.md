@@ -2,6 +2,8 @@
 ITI 9 months nodejs project supervised by Eng. Eman Fathi
 
 ## Requirements :
+
+### installing required packages
 1- Create package.json file for your project <code>npm init –y</code> <br>
 2- Install express <code>npm i express -save</code> <br>
 3- Install nodemon globally <code>npm i nodemon -g</code> <br>
@@ -10,3 +12,11 @@ ITI 9 months nodejs project supervised by Eng. Eman Fathi
 6- Install mongoose <code>npm i mongoose</code> <br>. Any version but not 7.0.0 so to be compatible with mongoose-sequence lib <br>
 7- <code>npm i mongoose-sequence</code> to autoincreamnt id 
 8- Install bcrypt <code>npm i bcrypt</code> <br> to incode password
+
+### Creating required directories
+1- create dir named images <br>
+2- create sub dir named <br>
+ -- admin
+ -- basicAdmin
+ -- employ
+ -- member
