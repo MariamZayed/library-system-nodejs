@@ -1,5 +1,6 @@
 # library-system-nodejs
 ITI 9 months nodejs project supervised by Eng. Eman Fathi
+<hr>
 
 ## Requirements :
 
@@ -13,10 +14,13 @@ ITI 9 months nodejs project supervised by Eng. Eman Fathi
 7- <code>npm i mongoose-sequence</code> to autoincreamnt id 
 8- Install bcrypt <code>npm i bcrypt</code> <br> to incode password
 
+<hr>
 ### Creating required directories
+
 1- create dir named images <br>
 2- create sub dir named <br>
- -- admin
+ -- admin 
  -- basicAdmin
  -- employ
  -- member
+ <hr>
