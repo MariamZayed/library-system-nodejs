@@ -42,8 +42,8 @@ const Schema=new mongoose.Schema({
 })
 
 Schema.plugin(AutoIncrement,{
-    id: 'adminCounter',
+    id: 'basicAdminCounter',
     inc_field: "_id"
 });
 
-mongoose.model("admins",Schema); //new name for model
+mongoose.model("basicAdmins",Schema); //new name for model
