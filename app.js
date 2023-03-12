@@ -5,7 +5,6 @@ const app=express()
 const cors=require("cors")
 const port = process.env.PORT || 8080;
 
-const adminRoute = require("./Routes/adminRoute");
 const bookRoute = require("./Routes/bookRoute");
 
 
@@ -22,7 +21,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/library')
 
     app.use(cors());
     app.use(express.json());
-    app.use(adminRoute);
     app.use(bookRoute);
 
     
