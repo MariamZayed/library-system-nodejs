@@ -1,9 +1,10 @@
 const mongoose=require("mongoose");
 require("../Model/adminModel");
 const fs =require("fs") 
+const { response } = require("express");
+const { matchedData } = require("express-validator");
 const bcrypt = require("bcrypt");
 const path = require("path");
-const { EventEmitter } = require("stream");
 const saltRounds = 10
 const salt = bcrypt.genSaltSync(saltRounds);
 
@@ -20,8 +21,20 @@ exports.getAllAdmins=(request,response)=>{
                 })
 }
 
+exports.getAdminById=(request,response,next)=>{
+    adminSchema.findOne(
+        {_id:request.body.id})
+        .then((data)=>{
+        if(data){
+            response.status(200).json({data}); 
+        }
+        else
+            throw new Error("Id not found")
+    })
+    .catch ((error)=> {next(error)});
+}
+
 exports.addAdmin=async(request,response,next)=>{
-    
     new adminSchema({
         firstName:request.body.firstName,
         lastName:request.body.lastName,
@@ -74,7 +87,11 @@ exports.deleteAdmin=(request,response,next)=>{
     adminSchema.deleteOne({
         _id:request.body.id
     }).then(data=>{
-        response.status(200).json({data});
+        if(data.deletedCount>0){
+            response.status(200).json({data});
+        }else 
+        throw new Error ("Can't delete not found id ")
+        
     })
     .catch(error=>next(error));
 }
