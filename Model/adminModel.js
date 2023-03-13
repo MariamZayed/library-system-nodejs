@@ -35,8 +35,25 @@ const Schema=new mongoose.Schema({
         'Please fill a valid email address'
         ],
     },
-    birthdate : { type:Date },
-    hireDate : { type:Date, require:true },
+    birthdate : {
+     type: String,
+    validate: {
+      validator: function (v) {
+        return /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/.test(v);
+      },
+      message: "Please enter a valid date",
+    }, 
+},
+    hiredate : { 
+        require:true,
+        type: String,
+         validate: {
+                 validator: function (v) {
+                      return /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/.test(v);
+                 },
+         message: "Please enter a valid date",
+    },
+ },
     image : { type:String },
     salary : { type:Number, require:true }
 })

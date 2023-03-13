@@ -27,19 +27,15 @@ const upload = multer({
     }),
 });
 
-const lol = (req,res,next)=>{
-    console.log(req.body)
-    console.log(req.file)
-    console.log(controller.addAdmin)
-    
-    next();
-}
-
 router
     .route("/admin")
     .get(controller.getAllAdmins)
     .post(upload.single('image'),adminvalidation.post, validateMW ,lol,controller.addAdmin)
     .patch(upload.single('image'),adminvalidation.update ,validateMW ,controller.updateAdmin)
     .delete(adminvalidation.delete ,validateMW ,controller.deleteAdmin);
+
+router
+    .route("/adminid")
+    .get(controller.getAdminById);
 
 module.exports = router;
