@@ -11,13 +11,12 @@ const bookRoute = require("./Routes/bookRoute");
 
 mongoose.set("strictQuery", false);
 
-// mongoose
-//   .connect(
-//     "mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority"
-//   )
+ // mongoose.connect("mongodb://127.0.0.1:27017/library")
 
-    mongoose.connect("mongodb://127.0.0.1:27017/library")
-    .then(() => {
+mongoose
+  .connect(
+    "mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority"
+  ).then(() => {
     console.log("database connected");
     app.listen(port, () => {
       console.log("server connected....");
