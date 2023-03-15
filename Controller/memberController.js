@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const fs = require("fs");
+const path = require("path");
 require("./../Model/memberModel");
 require("./../Model/BookModel");
 const memberSchema = mongoose.model("member");
@@ -35,7 +37,7 @@ exports.addMember = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-exports.updateMember=(request,response)=>{
+exports.updateMember=(request,response,next)=>{
     memberSchema.findOne({
         _id: request.body.id,
       })
@@ -54,7 +56,7 @@ exports.updateMember=(request,response)=>{
             );
           return memberSchema.updateOne(
             {
-              _id: request.body._id,
+              _id: request.body.id,
             },
             {
                 $set:{
@@ -86,7 +88,7 @@ exports.updateMember=(request,response)=>{
    
 }
 
-exports.deleteMember=(request,response)=>{
+exports.deleteMember=(request,response,next)=>{
     memberSchema.findOne({ _id: request.body.id })
     .then((data) => {
       console.log(data);
