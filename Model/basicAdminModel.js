@@ -1,7 +1,7 @@
-const mongoose=require("mongoose")
+const mongoose = require("mongoose")
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
-const Schema=new mongoose.Schema({
+const Schema = new mongoose.Schema({
     _id: Number,
     firstName:{
         type:String,

@@ -32,21 +32,11 @@ const upload = multer({
 });
 
 router
-  .route("/admin")
-  .get(controller.getAllAdmins)
-  .post(
-    upload.single("image"),
-    adminvalidation.post,
-    validateMW,
-    controller.addAdmin
-  )
-  .patch(
-    upload.single("image"),
-    adminvalidation.update,
-    validateMW,
-    controller.updateAdmin
-  )
-  .delete(adminvalidation.delete, validateMW, controller.deleteAdmin);
+    .route("/admin")
+    .get(controller.getAllAdmins)
+    .post(upload.single('image'),adminvalidation.post, validateMW ,controller.addAdmin)
+    .patch(upload.single('image'),adminvalidation.update ,validateMW ,controller.updateAdmin)
+    .delete(adminvalidation.delete ,validateMW ,controller.deleteAdmin);
 
 router.route("/adminid").get(controller.getAdminById);
 
