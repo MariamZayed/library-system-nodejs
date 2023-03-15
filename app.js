@@ -8,15 +8,16 @@ const port = process.env.PORT || 8080;
 const basicAdminRoute = require("./Routes/basicAdminRoute");
 const adminRoute = require("./Routes/adminRoute");
 const bookRoute = require("./Routes/bookRoute");
+const employeeRoute = require("./Routes/employeeRoute");
+const memberRoute = require("./Routes/memberRoute");
+
 
 mongoose.set("strictQuery", false);
 
- // mongoose.connect("mongodb://127.0.0.1:27017/library")
+ // connect("mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority")
 
-mongoose
-  .connect(
-    "mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority"
-  ).then(() => {
+mongoose.connect("mongodb://127.0.0.1:27017/library")
+  ..then(() => {
     console.log("database connected");
     app.listen(port, () => {
       console.log("server connected....");
@@ -42,7 +43,9 @@ app.use((request, response) => {
   response.status(404).json({ message: "Not Found" });
 });
 
-//Middlewre 3--- Error ----
-app.use((error, request, response, next) => {
-  response.status(500).json({ message: error + "" });
-});
+    //Middlewre 3--- Error ----
+    app.use((error,request,response,next)=>{
+        response.status(500).json({message:error+""});
+        if(request.file && request.file.path)
+        fs.unlinkSync(request.file.path);
+    });
