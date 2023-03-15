@@ -5,8 +5,8 @@ exports.post = [
     body("lastName").isString().withMessage("Last Name must be string"),
     body("password").isLength({min: 8}).withMessage("Password Must be Min length 8"),
     body("email").isEmail().withMessage("Invalid Email Format"),
-    body("birthdate").isDate().withMessage("Invalid Date"),
-    body("hireDate").isDate().withMessage("Invalid Hire Date"),
+    body("birthdate").isString().withMessage("Invalid Date"),
+    body("hiredate").isString().withMessage("Invalid Hire Date"),
     body("salary").isNumeric().withMessage("Salary Must be Number"),
 ];
 
@@ -15,8 +15,8 @@ exports.update = [
     body("lastName").optional().isString().withMessage("Last Name must be string"),
     body("password").optional().isLength({min: 8}).withMessage("Password Must be Min length 8"),
     body("email").optional().isEmail().withMessage("Invalid Email Format"),
-    body("birthdate").optional().isDate().withMessage("Invalid Date"),
-    body("hireDate").optional().isDate().withMessage("Invalid Hire Date"),
+    body("birthdate").optional().isString().withMessage("Invalid Date"),
+    body("hiredate").optional().isString().withMessage("Invalid Hire Date"),
     body("salary").optional().isNumeric().withMessage("Salary Must be Number")
 ];
 

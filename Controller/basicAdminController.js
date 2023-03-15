@@ -26,9 +26,9 @@ exports.addBasicAdmin=(request,response,next)=>{
         password: bcrypt.hashSync(request.body.password, salt),
         email:request.body.email,
         birthdate:request.body.birthdate,
-        hireDate:request.body.hireDate,
+        hiredate:request.body.hiredate,
         salary:request.body.salary,
-        image:request.file.path
+        image:request.file?.filename?? undefined
     }).save()// insertOne
     .then(data=>{
         response.status(201).json({data});
@@ -46,7 +46,8 @@ exports.updateBasicAdmin=(request,response,next)=>{
             
         }
         if(request.file){
-            fs.unlinkSync(data.image);
+            fs.unlinkSync(path.join(__dirname,"..","images","basicAdmin",`${data.image}`));
+
         }   
         return basicAdminSchema.updateOne({//Use return because use of two query actions 
             _id:request.body.id

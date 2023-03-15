@@ -2,7 +2,6 @@ const mongoose=require("mongoose");
 require("../Model/adminModel");
 const fs =require("fs") 
 const { response } = require("express");
-const { matchedData } = require("express-validator");
 const bcrypt = require("bcrypt");
 const path = require("path");
 const saltRounds = 10
@@ -41,9 +40,9 @@ exports.addAdmin=async(request,response,next)=>{
         password: bcrypt.hashSync(request.body.password, salt),
         email:request.body.email,
         birthdate:request.body.birthdate,
-        hireDate:request.body.hireDate,
+        hireDate:request.body.hiredate,
         salary:request.body.salary,
-        image:request.file.path
+        image:request.file?.filename ?? undefined//if no file posted, then make mongo put undefined  
     }).save()// insertOne
     .then(data=>{
         console.log(data)
