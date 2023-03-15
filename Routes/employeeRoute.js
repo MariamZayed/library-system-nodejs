@@ -1,11 +1,10 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
-// const{checkAdminAndBasicAdmin}=require('./../Core/authentication/authenticationMW');
 const controller = require("./../Controller/employeeController");
-const employeeValidation = require("./../Core/validation/employeeValidation");
+const employeeValidation = require("./../Core/Validation/employeeValidation");
 // const validateMW= require('./../Core/validations/validateMW');
-const { check } = require("express-validator");
+// const{checkAdminAndBasicAdmin}=require('./../Core/authentication/authenticationMW');
 
 const multerFilter = multer({
   fileFilter: (request, file, callBack) => {
