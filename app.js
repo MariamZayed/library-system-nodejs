@@ -13,7 +13,7 @@ const employeeRoute = require("./Routes/employeeRoute");
 const memberRoute = require("./Routes/memberRoute");
 
 // mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
-mongoose.connect("mongodb://127.0.0.1:27017/LibrarySystem")
+mongoose.connect("mongodb://127.0.0.1:2666/library?directConnection=true")
     .then(() => {
         console.log("database connected");
         app.listen(port,()=>{
@@ -31,6 +31,8 @@ app.use(express.json());
 app.use(basicAdminRoute);
 app.use(adminRoute);
 app.use(bookRoute);
+app.use(employeeRoute);
+app.use(memberRoute);
 
 
 app.use((request, response) => {

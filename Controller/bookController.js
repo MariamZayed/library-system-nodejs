@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-require("../Model/BookModel");
+require("./../Model/BookModel");
 require("./../Model/BookOperation")
 //getter
 const bookSchema = mongoose.model("book");
@@ -16,7 +16,7 @@ exports.getAllBooks = (request, response) => {
     });
 };
 
-@author: ashraf
+//@author: ashraf
 exports.addBook = (request, response, next) => {
   new bookSchema({
     _id: request.body._id,
@@ -95,7 +95,7 @@ exports.deleteBook=(request,response,next)=>{
   .catch((error) => next(error));
 }
 
-@author: asmaa
+//@author: asmaa
 // functions of member//
 
 // get borrowbook by filter year and month
