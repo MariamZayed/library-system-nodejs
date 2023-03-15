@@ -13,7 +13,8 @@ const employeeRoute = require("./Routes/employeeRoute");
 const memberRoute = require("./Routes/memberRoute");
 
 // mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
-mongoose.connect("mongodb://127.0.0.1:2666/library?directConnection=true")
+mongoose.connect("mongodb://127.0.0.1:27017/Library")
+
     .then(() => {
         console.log("database connected");
         app.listen(port,()=>{
@@ -36,7 +37,7 @@ app.use(memberRoute);
 
 
 app.use((request, response) => {
-  response.status(404).json({ message: "Not Found" });
+    response.status(404).json({ message: "Not Found" });
 });
 
 //Middlewre 3--- Error ----

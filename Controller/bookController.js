@@ -16,10 +16,8 @@ exports.getAllBooks = (request, response) => {
     });
 };
 
-//@author: ashraf
 exports.addBook = (request, response, next) => {
   new bookSchema({
-    _id: request.body._id,
     title: request.body.title,
     author: request.body.author,
     publisher: request.body.publisher,
@@ -95,7 +93,6 @@ exports.deleteBook=(request,response,next)=>{
   .catch((error) => next(error));
 }
 
-//@author: asmaa
 // functions of member//
 
 // get borrowbook by filter year and month
