@@ -9,9 +9,10 @@ mongoose.set("strictQuery",false)
 
 const basicAdminRoute = require("./Routes/basicAdminRoute");
 const adminRoute = require("./Routes/adminRoute");
+const employeeRoute = require("./Routes/employeeRoute");
 
 // mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
-mongoose.connect("mongodb://127.0.0.1:27017/library")
+mongoose.connect("mongodb://127.0.0.1:27017/Library")
     .then(() => {
         console.log("database connected");
         app.listen(port,()=>{
@@ -29,6 +30,9 @@ mongoose.connect("mongodb://127.0.0.1:27017/library")
     );
     app.use(cors());
     app.use(express.json());
+    app.use(express.urlencoded({ extended: false }));
+
+    app.use(employeeRoute);
     app.use(basicAdminRoute);
     app.use(adminRoute);
 
@@ -38,5 +42,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/library")
     
     //Middlewre 3--- Error ----
     app.use((error,request,response,next)=>{
-        response.status(500).json({message:error+""})
+        response.status(500).json({message:error+""});
+        if(request.file && request.file.path)
+        fs.unlinkSync(request.file.path);
     });
