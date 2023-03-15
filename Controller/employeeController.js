@@ -21,7 +21,6 @@ exports.getAllEmployee = (request, response, next) => {
 //Add an Employee
 exports.addEmployee = (request, response, next) => {
   new EmployeeSchema({
-    _id: request.body.id,
     firstName: request.body.firstName,
     lastName: request.body.lastName,
     email: request.body.email,
@@ -97,7 +96,7 @@ exports.updateEmployee = (request, response, next) => {
         );
       return EmployeeSchema.updateOne(
         {
-          _id: request.body._id,
+          _id: request.body.id,
         },
         {
           $set: {
