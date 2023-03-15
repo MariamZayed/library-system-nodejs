@@ -7,6 +7,8 @@ const controller = require("../Controller/bookController");
 router
   .route("/book")
   .get(controller.getAllBooks)
-  .post(bookValidation.post, validateMW, controller.addBook);
+  .post(bookValidation.post, validateMW, controller.addBook)
+  .patch(bookValidation.update, validateMW, controller.updateBook)
+  .delete(bookValidation.delete, validateMW, controller.deleteBook);
   
 module.exports = router;
