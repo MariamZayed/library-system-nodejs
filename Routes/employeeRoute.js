@@ -3,7 +3,7 @@ const multer = require("multer");
 const path = require("path");
 // const{checkAdminAndBasicAdmin}=require('./../Core/authentication/authenticationMW');
 const controller = require("./../Controller/employeeController");
-const employeeValidation = require("./../Core/validations/employeeValidation");
+const employeeValidation = require("./../Core/validation/employeeValidation");
 // const validateMW= require('./../Core/validations/validateMW');
 const { check } = require("express-validator");
 

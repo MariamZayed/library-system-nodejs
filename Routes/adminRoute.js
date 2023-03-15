@@ -30,7 +30,7 @@ const upload = multer({
 router
     .route("/admin")
     .get(controller.getAllAdmins)
-    .post(upload.single('image'),adminvalidation.post, validateMW ,lol,controller.addAdmin)
+    .post(upload.single('image'),adminvalidation.post, validateMW ,controller.addAdmin)
     .patch(upload.single('image'),adminvalidation.update ,validateMW ,controller.updateAdmin)
     .delete(adminvalidation.delete ,validateMW ,controller.deleteAdmin);
 
