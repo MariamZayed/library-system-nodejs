@@ -12,15 +12,15 @@ const bookRoute = require("./Routes/bookRoute");
 const employeeRoute = require("./Routes/employeeRoute");
 const memberRoute = require("./Routes/memberRoute");
 
-// connect("mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority")
-mongoose.connect("mongodb://127.0.0.1:27017/library")
-  ..then(() => {
-    console.log("database connected");
-    app.listen(port, () => {
-      console.log("server connected....");
-    });
-  })
-  .catch((error) => console.log(`DB connection error ${error}`));
+// mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect("mongodb://127.0.0.1:27017/LibrarySystem")
+    .then(() => {
+        console.log("database connected");
+        app.listen(port,()=>{
+            console.log("server connected....");
+        })
+    })
+    .catch((error)=> console.log(`DB connection error ${error}`))
 
 app.use(morgan("combined"));
 app.use(express.json());
