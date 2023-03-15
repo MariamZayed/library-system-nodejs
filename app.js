@@ -9,6 +9,7 @@ mongoose.set("strictQuery",false)
 
 const basicAdminRoute = require("./Routes/basicAdminRoute");
 const adminRoute = require("./Routes/adminRoute");
+const memberRoute = require("./Routes/memberRoute");
 
 // mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
 mongoose.connect("mongodb://127.0.0.1:27017/library")
@@ -31,7 +32,8 @@ mongoose.connect("mongodb://127.0.0.1:27017/library")
     app.use(express.json());
     app.use(basicAdminRoute);
     app.use(adminRoute);
-
+    app.use(memberRoute);
+    
     app.use((request,response)=>{
         response.status(404).json({message:"Not Found"});
     });
