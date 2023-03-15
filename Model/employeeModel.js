@@ -44,16 +44,29 @@ let employeeSchema = new mongoose.Schema({
   image: String,
   
   birthDate: {
-    type: Date,
-    min: "1980-01-1",
-    max: "1999-01-1",
-  },
-  hireDate: { type: Date, immutable: true },
+    type: String,
+    validate: {
+        validator: function (v) {
+        return /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/.test(v);
+        },
+        message: "Please enter a valid date",
+    }, 
+},
+  hireDate: { 
+    require:true,
+    type: String,
+    validate: {
+        validator: function (v) {
+        return /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/.test(v);
+        },
+        message: "Please enter a valid date",
+    },
+},
   salary: {
     type: Number,
     required: true,
     min: "3000",
-    max: "8000",
+    max: "20000",
   }
 });
 

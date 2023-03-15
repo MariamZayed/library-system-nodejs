@@ -29,6 +29,8 @@ const multerFilter = multer({
   }),
 });
 
+
+
 const router = express.Router();
 router
   .route("/employee")
@@ -57,3 +59,4 @@ router
 router.route("/employee/search").get(controller.searchEmployee);
 
 module.exports = router;
+    
