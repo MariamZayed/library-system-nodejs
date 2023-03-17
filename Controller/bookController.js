@@ -92,8 +92,15 @@ exports.deleteBook=(request,response,next)=>{
   .catch((error) => next(error));
 }
 
-//member//
-//arrivalBook
+// functions of member//
+// toDo put specific member for function
+//1-borrowbook 2-readingbook
+
+
+
+// get BooksBorrow in current month for member
+
+//arrivalBook during month
 exports.getArrivalBook = (request, response) => {
   const date = new Date();
   const year = date.getFullYear();
@@ -133,6 +140,40 @@ exports.getArrivalBook = (request, response) => {
   response.status(200).json({ data });
   })
 .catch((error) => next(error));
+}
+
+//search book by year
+exports.searchBookByYear=(request,response,next)=>{
+const year = request.params.year * 1;
+
+  // *1 to convert it to number
+ bookSchema.aggregate([ 
+  {
+      $match:
+      {
+          publishingDate:{
+            $gte :new Date (`${year}-01-01`),
+            $lte :new Date (`${year}-12-31`)
+          },          
+      }
+  }// stage1
+  ,
+  {
+ $project:
+      {
+            title:1,
+            author:1,
+            publisher:1,
+            publishingDate:1,
+            category:1
+      }
+  }// stage2
+])
+
+.then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
 }
 
 //search book by catagery
@@ -225,11 +266,11 @@ exports.searchBookByAuthor=(request,response,next)=>{
       })
       .catch((error) => next(error));
   }
+
 //search book by year
 exports.searchBookByYear=(request,response,next)=>{
   const year = request.params.year * 1;
-  
-    // *1 to convert it to number
+      // *1 to convert it to number
    bookSchema.aggregate([ 
     {
         $match:
@@ -258,5 +299,9 @@ exports.searchBookByYear=(request,response,next)=>{
       })
       .catch((error) => next(error));
   }
-  //member//
-  
+//member//
+//search book by available
+// toDo
+//
+
+//end member//

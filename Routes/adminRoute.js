@@ -32,6 +32,7 @@ const upload = multer({
 });
 
 router
+     
     .route("/admin")
     .get(controller.getAllAdmins)
     .post(upload.single('image'),adminvalidation.post, validateMW ,controller.addAdmin)
