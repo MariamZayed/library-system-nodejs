@@ -16,9 +16,11 @@ const bookOperationRoute= require("./Routes/bookOperationRoute");
 
 
 // mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
-mongoose
-  .connect("mongodb://127.0.0.1:27017/LibrarySystem")
-  .then(() => {
+
+
+mongoose.connect("mongodb://127.0.0.1:27017/librarySystem")
+// mongoose.connect("mongodb://127.0.0.1:2666/library?directConnection=true")
+ .then(() => {
     console.log("database connected");
     app.listen(port, () => {
       console.log("server connected....");
