@@ -18,4 +18,21 @@ router
 .route("/book/BookreadingByYearandMonth/:year/:month")
     .get(controller.readingBookByYearandMonth)
 
+ //schema on operation book for member
+ router
+ .route("/book/readingbook")
+ .get(controller.getBooksreading)
+ router
+ .route("/book/borrowingbook")
+ .get(controller.getBooksBorrow)
+ router
+ .route("/book/BookborrowByYearandMonth/:year/:month")
+ .get(controller.borrowBookByYearandMonth)
+ router
+ .route("/book/BookreadingByYearandMonth/:year/:month")
+ .get(controller.readingBookByYearandMonth)
+ router
+ .route("/book/getCurentBooksBorrow")
+ .get(controller.getCurentBooksBorrow)
+
 module.exports = router;

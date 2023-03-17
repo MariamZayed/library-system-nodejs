@@ -13,5 +13,7 @@ router
 router
   .route("/book/ArrivalBook")
   .get(controller.getArrivalBook)
-
+  router
+  .route("/book/searchBookByYear/:year")
+  .get(controller.searchBookByYear)
 module.exports = router;
