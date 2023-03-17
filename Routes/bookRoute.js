@@ -10,8 +10,8 @@ router
   .post(bookValidation.post, validateMW, controller.addBook)
   .patch(bookValidation.update, validateMW, controller.updateBook)
   .delete(bookValidation.delete, validateMW, controller.deleteBook);
-router
-  .route("/book/ArrivalBook")
-  .get(controller.getArrivalBook)
+router.route("/book/ArrivalBook").get(controller.getArrivalBook);
+
+router.get("/book/:id", controller.getOneBook);
 
 module.exports = router;
