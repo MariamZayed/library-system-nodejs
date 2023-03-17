@@ -35,6 +35,7 @@ exports.getAdminById=(request,response,next)=>{
 }
 
 exports.addAdmin=async(request,response,next)=>{
+    console.log(request.file,"asdasd")
     new adminSchema({
         firstName:request.body.firstName,
         lastName:request.body.lastName,
@@ -43,7 +44,7 @@ exports.addAdmin=async(request,response,next)=>{
         birthdate:request.body.birthdate,
         hireDate:request.body.hireDate,
         salary:request.body.salary,
-        image:request.file.path
+        image:request.file?.filename?? undefined
     }).save()// insertOne
     .then(data=>{
         console.log(data)
@@ -84,14 +85,20 @@ exports.updateAdmin=(request,response,next)=>{
 }
 
 exports.deleteAdmin=(request,response,next)=>{
-    adminSchema.deleteOne({
+    adminSchema.findOne({
         _id:request.body.id
     }).then(data=>{
+        if(!data){
+            throw new Error ("Can't delete not found id ")
+        }
+       if (data.image){
+        fs.unlinkSync(path.join(__dirname,"..","images","admin",`${data.image}`));
+        }
+       return adminSchema.deleteOne({ _id: request.body.id });
+
+    }).then (data=>{
         if(data.deletedCount>0){
             response.status(200).json({data});
-        }else 
-        throw new Error ("Can't delete not found id ")
-        
+           }
     })
-    .catch(error=>next(error));
-}
+    .catch((error)=>next(error));
