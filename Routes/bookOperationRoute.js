@@ -13,20 +13,21 @@ router
 router
   .route("/book/BookreadingByYearandMonth/:year/:month")
   .get(controller.readingBookByYearandMonth);
-
-
+router
+.route("/book/getCurentBooksBorrow")
+.get(controller.getCurentBooksBorrow)
+  
 //show data if any member exceeds the return date of the borrow books
-router.route("/book/checkReturn").get(controller.returnDate);
-
-
-
+router
+    .route("/book/checkReturn").get(controller.returnDate);
 router
   .route("/bookaction")
   .get(controller.getAllBookOperations)
   .post(validateMW, controller.bookAction);
+router
+    .route("/bookreturn").post(validateMW, controller.bookReturn);
 
-router.route("/bookreturn").post(validateMW, controller.bookReturn);
-
+    
 
 
 module.exports = router;

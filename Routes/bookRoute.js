@@ -11,7 +11,10 @@ router
   .patch(bookValidation.update, validateMW, controller.updateBook)
   .delete(bookValidation.delete, validateMW, controller.deleteBook);
 router.route("/book/ArrivalBook").get(controller.getArrivalBook);
-
+router
+  .route("/book/searchBookByYear/:year")
+  .get(controller.searchBookByYear)
+  
 router.get("/book/:id", controller.getOneBook);
 
 module.exports = router;
