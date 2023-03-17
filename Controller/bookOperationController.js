@@ -340,6 +340,19 @@ exports.bookAction = async (request, response, next) => {
 
 // return book
 
+
+//if any member exceeds the return date of borrow books
+exports.returnDate = (request, response, next) => {
+    bookOperattion
+      .find({ dateReturn: { $lte: Date.now() }, isReturn:false })
+      .then((data) => {
+        response.status(200).json({ data });
+      })
+      .catch((error) => next(error));
+  };
+
+//end member//
+
 exports.bookReturn = async (request, response, next) => {
   try {
     let findBook = await bookSchema.findOne({ _id: request.body.bookId });

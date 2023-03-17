@@ -4,19 +4,19 @@ const router = express.Router();
 const validateMW = require("../Core/Validation/validateMW");
 const controller = require("../Controller/bookOperationController");
 
- //schema on operation book for member
+//schema on operation book for member
+router.route("/book/readingbook").get(controller.getBooksreading);
+router.route("/book/borrowingbook").get(controller.getBooksBorrow);
 router
-    .route("/book/readingbook")
-    .get(controller.getBooksreading)
+  .route("/book/BookborrowByYearandMonth/:year/:month")
+  .get(controller.borrowBookByYearandMonth);
 router
-    .route("/book/borrowingbook")
-    .get(controller.getBooksBorrow)
-router
-    .route("/book/BookborrowByYearandMonth/:year/:month")
-    .get(controller.borrowBookByYearandMonth)
-router
-.route("/book/BookreadingByYearandMonth/:year/:month")
-    .get(controller.readingBookByYearandMonth)
+  .route("/book/BookreadingByYearandMonth/:year/:month")
+  .get(controller.readingBookByYearandMonth);
+
+
+//show data if any member exceeds the return date of the borrow books
+router.route("/book/checkReturn").get(controller.returnDate);
 
 
 
@@ -26,6 +26,7 @@ router
   .post(validateMW, controller.bookAction);
 
 router.route("/bookreturn").post(validateMW, controller.bookReturn);
+
 
 
 module.exports = router;

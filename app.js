@@ -11,17 +11,18 @@ const adminRoute = require("./Routes/adminRoute");
 const bookRoute = require("./Routes/bookRoute");
 const employeeRoute = require("./Routes/employeeRoute");
 const memberRoute = require("./Routes/memberRoute");
+const bookOperationRoute= require("./Routes/bookOperationRoute");
 
 // mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
-mongoose.connect("mongodb://127.0.0.1:27017/Library")
-
-    .then(() => {
-        console.log("database connected");
-        app.listen(port,()=>{
-            console.log("server connected....");
-        })
-    })
-    .catch((error)=> console.log(`DB connection error ${error}`))
+mongoose
+  .connect("mongodb://127.0.0.1:27017/LibrarySystem")
+  .then(() => {
+    console.log("database connected");
+    app.listen(port, () => {
+      console.log("server connected....");
+    });
+  })
+  .catch((error) => console.log(`DB connection error ${error}`));
 
 app.use(morgan("combined"));
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use(express.json());
 app.use(basicAdminRoute);
 app.use(adminRoute);
 app.use(bookRoute);
+app.use(bookOperationRoute);
 app.use(employeeRoute);
 app.use(memberRoute);
 
