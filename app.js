@@ -6,13 +6,13 @@ const app = express();
 const port = process.env.PORT || 8080;
 mongoose.set("strictQuery", false);
 
+const login=require("./Routes/login")
 const basicAdminRoute = require("./Routes/basicAdminRoute");
 const adminRoute = require("./Routes/adminRoute");
 const bookRoute = require("./Routes/bookRoute");
 const employeeRoute = require("./Routes/employeeRoute");
 const memberRoute = require("./Routes/memberRoute");
 const bookOperationRoute= require("./Routes/bookOperationRoute");
-const login=require("./Routes/login")
 
 
 // mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
@@ -32,13 +32,13 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cors());
 app.use(express.json());
+app.use(login);
 app.use(basicAdminRoute);
 app.use(adminRoute);
 app.use(bookRoute);
 app.use(bookOperationRoute);
 app.use(employeeRoute);
 app.use(memberRoute);
-app.use(login);
 
 
 
