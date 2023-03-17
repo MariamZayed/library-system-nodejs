@@ -3,7 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const controller = require("./../Controller/employeeController");
 const employeeValidation = require("./../Core/Validation/employeeValidation");
-// const validateMW= require('./../Core/validations/validateMW');
+const validateMW = require("./../Core/Validation/validateMW");
 // const{checkAdminAndBasicAdmin}=require('./../Core/authentication/authenticationMW');
 
 const multerFilter = multer({
@@ -29,8 +29,6 @@ const multerFilter = multer({
   }),
 });
 
-
-
 const router = express.Router();
 router
   .route("/employee")
@@ -38,11 +36,13 @@ router
   .post(
     multerFilter.single("image"),
     employeeValidation.validateEmployee,
+    validateMW,
     controller.addEmployee
   )
   .patch(
     multerFilter.single("image"),
     employeeValidation.validateEmployeeOptional,
+    validateMW,
     controller.updateEmployee
   );
 
@@ -52,11 +52,11 @@ router
   .delete(
     multerFilter.single("image"),
     employeeValidation.paramVal,
+    validateMW,
     controller.deleteEmployee
   );
 
 //search for firstName and lastName
-router.route("/employee/search").get(controller.searchEmployee);
+router.route("/employee/search").get(validateMW, controller.searchEmployee);
 
 module.exports = router;
-    
