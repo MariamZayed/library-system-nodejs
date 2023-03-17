@@ -18,4 +18,14 @@ router
 .route("/book/BookreadingByYearandMonth/:year/:month")
     .get(controller.readingBookByYearandMonth)
 
+
+
+router
+  .route("/bookaction")
+  .get(controller.getAllBookOperations)
+  .post(validateMW, controller.bookAction);
+
+router.route("/bookreturn").post(validateMW, controller.bookReturn);
+
+
 module.exports = router;
