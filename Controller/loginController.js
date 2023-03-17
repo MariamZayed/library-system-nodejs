@@ -1,12 +1,13 @@
-
+require("./../Model/memberModel")
 const jwt=require("jsonwebtoken");
 const mongoose=require("mongoose");
 let memberSchema=mongoose.model("member");
 const bcrypt = require('bcrypt');
- 
+ // todo require 3 schema
 
 //member
 exports.loginMember=(request,response,next)=>{
+   
         memberSchema.findOne({email:request.body.email})
                     .then(data=>{
                      if(data==null)
@@ -16,7 +17,7 @@ exports.loginMember=(request,response,next)=>{
                         throw new Error('member not found');
                      }
                      else{
-
+                       
                         let correctPassword= bcrypt.compare(request.body.password, data.password)
                         if(!correctPassword)
                         {
@@ -26,6 +27,12 @@ exports.loginMember=(request,response,next)=>{
                         }
                        
                      }
+                      // if scema.isActivated == false
+                        // {
+                        //   throw "sorry u should activate"
+                        // }
+                        
+                        
                     return data
                     })
                     .then(data=>{
