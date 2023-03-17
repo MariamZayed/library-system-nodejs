@@ -4,6 +4,11 @@ const path = require("path");
 require("./../Model/memberModel");
 require("./../Model/BookModel");
 const memberSchema = mongoose.model("member");
+const {checkEmpolyeeAdminandBasic,checkEmpolyeeAdminandBasicMember}=require("./../Core/auth/authorization")
+//hash password
+const bcrypt = require('bcrypt');
+const saltRound = 10;
+const salt = bcrypt.genSaltSync(saltRound);
 
 exports.getAllMember = (request, response, next) => {
   memberSchema
@@ -22,7 +27,7 @@ exports.addMember = (request, response, next) => {
     _id: request.body.id,
     fullName: request.body.fullName,
     email: request.body.email,
-    password: request.body.password,
+    password: bcrypt.hashSync(request.body.password,salt),
     phoneNumber: request.body.phonenumber,
     image: request.body.image,
     birthDate: request.body.birthdate,
@@ -42,14 +47,13 @@ exports.updateMember=(request,response,next)=>{
         _id: request.body.id,
       })
         .then((data) => {
-          // if (request.role == "employee") {
-          // if ((request.body.id = !request.id)) {
-          //   throw new Error("Not Authorized to update Data");
-          // }
-          //   delete request.body.email;
-          //   delete request.body.hireDate;
-          //   delete request.body.salary;
-          // }
+          if (request.role == "member") {
+          if ((request.body.id = !request.id)) {
+            throw new Error("Not Authorized to update Data");
+          }
+            delete request.body.email;
+          }
+          let hashedPass = req.body.password ? bcrypt.hashSync(req.body.password, salt) : req.body.password;
           if (request.file && data.image)
             fs.unlinkSync(
               path.join(__dirname, "..", "images", "member", `${data.image}`)
@@ -57,12 +61,13 @@ exports.updateMember=(request,response,next)=>{
           return memberSchema.updateOne(
             {
               _id: request.body.id,
+              
             },
             {
                 $set:{
                     fullName:request.body.fullName,
                     email: request.body.email,
-                    password:request.body.password,
+                    password:hashedPass,
                     phoneNumber:request.body.phonenumber,
                     image: request.body.image,
                     birthDate:request.body.birthdate,
@@ -148,30 +153,30 @@ exports.getMemberbyemail = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-exports.getReadingbook = (request, response, next) => {
-  memberSchema
-    .find({ _id: request.params.id }, { readingBooks: 1 })
-    .populate({ path: "readingBooks", select: { title: 1 } })
-    .then((data) => {
-      if (data == null) {
-        next(new Error("book not found"));
-      } else {
-        response.status(200).json({ data });
-      }
-    })
-    .catch((error) => next(error));
-};
+// exports.getReadingbook = (request, response, next) => {
+//   memberSchema
+//     .find({ _id: request.params.id }, { readingBooks: 1 })
+//     .populate({ path: "readingBooks", select: { title: 1 } })
+//     .then((data) => {
+//       if (data == null) {
+//         next(new Error("book not found"));
+//       } else {
+//         response.status(200).json({ data });
+//       }
+//     })
+//     .catch((error) => next(error));
+// };
 
-exports.getborrowbook = (request, response, next) => {
-  memberSchema
-    .find({ _id: request.params.id }, { readingBooks: 1 })
-    .populate({ path: "readingBooks", select: { title: 1 } })
-    .then((data) => {
-      if (data == null) {
-        next(new Error("book not found"));
-      } else {
-        response.status(200).json({ data });
-      }
-    })
-    .catch((error) => next(error));
-};
+// exports.getborrowbook = (request, response, next) => {
+//   memberSchema
+//     .find({ _id: request.params.id }, { readingBooks: 1 })
+//     .populate({ path: "readingBooks", select: { title: 1 } })
+//     .then((data) => {
+//       if (data == null) {
+//         next(new Error("book not found"));
+//       } else {
+//         response.status(200).json({ data });
+//       }
+//     })
+//     .catch((error) => next(error));
+// };

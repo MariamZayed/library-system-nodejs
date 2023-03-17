@@ -94,6 +94,8 @@ exports.deleteBook=(request,response,next)=>{
 }
 
 // functions of member//
+// toDo put specific member for function
+//1-borrowbook 2-readingbook
 
 // get borrowbook by filter year and month
 exports.BookborrowByYearandMonth = (request, response, next) => {
@@ -137,7 +139,6 @@ exports.BookborrowByYearandMonth = (request, response, next) => {
 exports.BookreadingByYearandMonth = (request, response, next) => {
   const year = request.params.year * 1;
   const month = request.params.month * 1;
- 
   // *1 to convert it to number
  bookOperattion.aggregate([ 
   {
@@ -270,7 +271,7 @@ exports.getBooksBorrow = (request, response, next) => {
 .catch((error) => next(error));
 }
 
-//arrivalBook
+//arrivalBook during month
 exports.getArrivalBook = (request, response) => {
   const date = new Date();
   const year = date.getFullYear();
@@ -349,7 +350,6 @@ const year = request.params.year * 1;
     .catch((error) => next(error));
 }
 
-
 //search book by catagery
 exports.searchBookByCatagery=(request,response,next)=>{
   const catagery = request.params.catagery;
@@ -379,9 +379,7 @@ exports.searchBookByCatagery=(request,response,next)=>{
         response.status(200).json({ data });
       })
       .catch((error) => next(error));
-  }
-  
-
+  } 
 //search book by publisher
 exports.searchBookByPublisher=(request,response,next)=>{
   const publisher = request.params.publisher;
@@ -412,7 +410,6 @@ exports.searchBookByPublisher=(request,response,next)=>{
       })
       .catch((error) => next(error));
   }
-  
 //search book by author
 exports.searchBookByAuthor=(request,response,next)=>{
   const author = request.params.author;
@@ -444,31 +441,66 @@ exports.searchBookByAuthor=(request,response,next)=>{
       .catch((error) => next(error));
   }
   
+
 //search book by available
-exports.searchBookByAuthor=(request,response,next)=>{
-  const author = request.params.author;
-  bookSchema.aggregate([ 
-    {
-        $match:
-        {
-          author:{$eq:`${author}`},          
-        }
-    }// stage1
-    ,
-    {
-   $project:
-        {
-              title:1,
-              author:1,
-              publisher:1,
-              publishingDate:1,
-              category:1
-        }
-    }// stage2
-  ])
-  .then((data) => {
-        response.status(200).json({ data });
-      })
-      .catch((error) => next(error));
+// toDo
+//
+
+// current borrowing books and return date 
+exports.getCurentBooksBorrow = (request, response, next) => {
+  //get current month from fist day to last day of month
+  const date = new Date();
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let f = new Date(year, month, 1).getDate();
+  let l = new Date(year, month, 0).getDate();
+  //format
+  f = f < 10 ? '0'+f : f;
+  l = l < 10 ? '0'+l : l;
+  month = month < 10 ? '0'+month : month;
+
+  const firstDay = new Date(`${year}-${month}-${f}`);
+  const lastDay = new Date(`${year}-${month}-${l}`);
+  //console.log(firstDay,lastDay)
+  bookOperattion.aggregate([ 
+  {
+      $match:
+      {
+          operationOnBook:{$eq:"borrowing"},
+          startOperation:{
+            $gte :new Date (`${firstDay}`),
+            $lte:new Date (`${lastDay}`)
+          },
+          isReturn:{$eq:"false"},
+          //memberId:{$eq:request.id}
+      }
+  }// stage1
+  ,
+  {
+    $lookup: {
+      from: "books",
+      localField: "bookId",
+      foreignField: "_id",
+      as: "borrowBooks"
   }
+  },
+  {
+ $project:
+      {
+            startOperation:1,
+            return:1,
+            operationOnBook:1,
+            memberId:1,
+            borrowBooks:"$borrowBooks"
+      }
+  }// stage2
+  
+])
+.then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
+
+
+}
 //end member//

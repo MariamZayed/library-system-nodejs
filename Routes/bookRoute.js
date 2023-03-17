@@ -10,6 +10,7 @@ router
   .post(bookValidation.post, validateMW, controller.addBook)
   .patch(bookValidation.update, validateMW, controller.updateBook)
   .delete(bookValidation.delete, validateMW, controller.deleteBook);
+  
     router
     .route("/book/ArrivalBook")
     .get(controller.getArrivalBook)
@@ -30,5 +31,10 @@ router
  router
  .route("/book/BookreadingByYearandMonth/:year/:month")
  .get(controller.BookreadingByYearandMonth)
+ router
+ .route("/book/getCurentBooksBorrow")
+ .get(controller.getCurentBooksBorrow)
 
+
+ 
 module.exports = router;

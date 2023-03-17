@@ -45,7 +45,7 @@ router.route("/member/email/:email")
       .get(controller.getMemberbyemail)
 
 //get readingbook by member
-router.route("/member/readingbook/:id")
-      .get(controller.getReadingbook)
+// router.route("/member/readingbook/:id")
+//       .get(controller.getReadingbook)
 
 module.exports=router;
