@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 //to upload image(file) use package multer
 const controller=require("./../Controller/memberController");
+const {checkEmpolyeeAdminandBasic,checkEmpolyeeAdminandBasicMember} = require("./../Core/auth/authorization");
 
 const router=express.Router();
 const multerFilter = multer({
@@ -29,23 +30,20 @@ const multerFilter = multer({
   });
 
 router.route("/member")
-    .get(controller.getAllMember)
-    .post(multerFilter.single("image"),controller.addMember)
-    .put(multerFilter.single("image"),controller.updateMember)
-    .delete(multerFilter.single("image"),controller.deleteMember)
+    .get(checkEmpolyeeAdminandBasic,controller.getAllMember)
+    .post(multerFilter.single("image"),checkEmpolyeeAdminandBasic,controller.addMember)
+    .put(multerFilter.single("image"),checkEmpolyeeAdminandBasicMember,controller.updateMember)
+    .delete(multerFilter.single("image"),checkEmpolyeeAdminandBasic,controller.deleteMember)
 
 //update specified Member.
 router.route("/member/:id")
-      .get(controller.getMember)
+      .get(checkEmpolyeeAdminandBasic,controller.getMember)
 //get member by name
 router.route("/member/name/:name")
-      .get(controller.getMemberbyName)
+      .get(checkEmpolyeeAdminandBasic,controller.getMemberbyName)
 //get member by email
 router.route("/member/email/:email")
-      .get(controller.getMemberbyemail)
+      .get(checkEmpolyeeAdminandBasic,controller.getMemberbyemail)
 
-//get readingbook by member
-router.route("/member/readingbook/:id")
-      .get(controller.getReadingbook)
 
 module.exports=router;

@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+const salt = bcrypt.genSalt(saltRounds);
 require("./../Model/memberModel");
 require("./../Model/BookModel");
 const memberSchema = mongoose.model("member");
@@ -16,13 +19,12 @@ exports.getAllMember = (request, response, next) => {
 };
 
 exports.addMember = (request, response, next) => {
-  console.log(request.body.readingBooks);
   //create object from schem then use save as(insert one)
   new memberSchema({
     _id: request.body.id,
     fullName: request.body.fullName,
     email: request.body.email,
-    password: request.body.password,
+    password: bcrypt.hashSync(request.body.password, parseInt(salt)),
     phoneNumber: request.body.phonenumber,
     image: request.body.image,
     birthDate: request.body.birthdate,
@@ -42,14 +44,12 @@ exports.updateMember=(request,response,next)=>{
         _id: request.body.id,
       })
         .then((data) => {
-          // if (request.role == "employee") {
-          // if ((request.body.id = !request.id)) {
-          //   throw new Error("Not Authorized to update Data");
-          // }
-          //   delete request.body.email;
-          //   delete request.body.hireDate;
-          //   delete request.body.salary;
-          // }
+          if (request.role == "member") {
+          if ((request.body.id = !request.id)) {
+            throw new Error("Not Authorized to update Data");
+          }
+            delete request.body.email; 
+          }
           if (request.file && data.image)
             fs.unlinkSync(
               path.join(__dirname, "..", "images", "member", `${data.image}`)
@@ -148,30 +148,31 @@ exports.getMemberbyemail = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-exports.getReadingbook = (request, response, next) => {
-  memberSchema
-    .find({ _id: request.params.id }, { readingBooks: 1 })
-    .populate({ path: "readingBooks", select: { title: 1 } })
-    .then((data) => {
-      if (data == null) {
-        next(new Error("book not found"));
-      } else {
-        response.status(200).json({ data });
-      }
-    })
-    .catch((error) => next(error));
-};
 
-exports.getborrowbook = (request, response, next) => {
-  memberSchema
-    .find({ _id: request.params.id }, { readingBooks: 1 })
-    .populate({ path: "readingBooks", select: { title: 1 } })
-    .then((data) => {
-      if (data == null) {
-        next(new Error("book not found"));
-      } else {
-        response.status(200).json({ data });
-      }
-    })
-    .catch((error) => next(error));
-};
+// exports.getReadingbook = (request, response, next) => {
+//   memberSchema
+//     .find({ _id: request.params.id }, { readingBooks: 1 })
+//     .populate({ path: "readingBooks", select: { title: 1 } })
+//     .then((data) => {
+//       if (data == null) {
+//         next(new Error("book not found"));
+//       } else {
+//         response.status(200).json({ data });
+//       }
+//     })
+//     .catch((error) => next(error));
+// };
+
+// exports.getborrowbook = (request, response, next) => {
+//   memberSchema
+//     .find({ _id: request.params.id }, { readingBooks: 1 })
+//     .populate({ path: "readingBooks", select: { title: 1 } })
+//     .then((data) => {
+//       if (data == null) {
+//         next(new Error("book not found"));
+//       } else {
+//         response.status(200).json({ data });
+//       }
+//     })
+//     .catch((error) => next(error));
+// };

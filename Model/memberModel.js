@@ -56,18 +56,7 @@ const memberSchema = new mongoose.Schema({
     //7I dont want it to ever change
     immutable: true,
     require: true,
-  },
-  readingBooks: {
-    type: Array,
-    ref: "books",
-    required: true,
-  },
-
-  borrowBooks: {
-    type: Array,
-    ref: "books",
-    required: true,
-  },
+  }
 });
 
 memberSchema.plugin(AutoIncrement, { id: "memberId", inc_field: "_id" });
