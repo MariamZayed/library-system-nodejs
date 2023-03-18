@@ -1,9 +1,10 @@
 const mongoose=require("mongoose");
 
+
 const schema=new mongoose.Schema({
 bookId:{
     type:Number,
-    ref:"books",
+    ref:"book",
     required:true
 },
 
@@ -40,6 +41,7 @@ isReturn:{
 }
 
 })
+
 
 mongoose.model("bookOperattion",schema);
 

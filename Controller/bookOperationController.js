@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 require("./../Model/BookOperation");
+require("./../Model/memberModel");
+require("./../Model/employeeModel");
+require("./../Model/BookModel");
 //getter
 const bookSchema = mongoose.model("book");
+const memberSchema = mongoose.model("member");
+const employeeSchema = mongoose.model("employees");
 const bookOperattion = mongoose.model("bookOperattion");
 // functions of member//
 
@@ -294,9 +299,9 @@ exports.bookAction = async (request, response, next) => {
   try {
     let findBook = await bookSchema.findOne({ _id: request.body.bookId });
     if (findBook == null) throw new Error("book not found");
-    let findMember = await member.findOne({ _id: request.body.memberId });
+    let findMember = await memberSchema.findOne({ _id: request.body.memberId });
     if (findMember == null) throw new Error("member not found");
-    let findEmp = await employee.findOne({ _id: request.body.empId });
+    let findEmp = await employeeSchema.findOne({ _id: request.body.empId });
     if (findEmp == null) throw new Error("employee not found");
     // add [&& return] to the next if after the ("get" from transaction schema) function is done
     let checkreturn = await bookOperattion.findOne({
@@ -321,12 +326,24 @@ exports.bookAction = async (request, response, next) => {
           if (request.body.operationOnBook == "borrowing")
             bookSchema.updateOne(
               { _id: request.body.bookId },
-              { $inc: { noOfBorrowedCopies: 1, noOfAvailableCopies: -1 } }
+              {
+                $inc: {
+                  noOfBorrowedCopies: 1,
+                  timesOfBorrowing: 1,
+                  noOfAvailableCopies: -1,
+                },
+              }
             );
           else
             bookSchema.updateOne(
               { _id: request.body.bookId },
-              { $inc: { noOfreadingCopies: 1, noOfAvailableCopies: -1 } }
+              {
+                $inc: {
+                  noOfreadingCopies: 1,
+                  timesOfReading: 1,
+                  noOfAvailableCopies: -1,
+                },
+              }
             );
 
           response.status(201).json({ data });
@@ -344,9 +361,9 @@ exports.bookReturn = async (request, response, next) => {
   try {
     let findBook = await bookSchema.findOne({ _id: request.body.bookId });
     if (findBook == null) throw new Error("book not found");
-    let findMember = await member.findOne({ _id: request.body.memberId });
+    let findMember = await memberSchema.findOne({ _id: request.body.memberId });
     if (findMember == null) throw new Error("member not found");
-    let findEmp = await employee.findOne({ _id: request.body.empId });
+    let findEmp = await employeeSchema.findOne({ _id: request.body.empId });
     if (findEmp == null) throw new Error("employee not found");
     let checkreturn = await bookOperattion.findOne({
       bookId: request.body.bookId,

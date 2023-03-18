@@ -44,23 +44,11 @@ let employeeSchema = new mongoose.Schema({
   image: String,
   
   birthDate: {
-    type: String,
-    validate: {
-        validator: function (v) {
-        return /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/.test(v);
-        },
-        message: "Please enter a valid date",
-    }, 
+    type: Date,
 },
   hireDate: { 
     require:true,
-    type: String,
-    validate: {
-        validator: function (v) {
-        return /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/.test(v);
-        },
-        message: "Please enter a valid date",
-    },
+    type: Date,
 },
   salary: {
     type: Number,

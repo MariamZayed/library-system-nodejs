@@ -9,11 +9,13 @@ mongoose.set("strictQuery", false);
 const basicAdminRoute = require("./Routes/basicAdminRoute");
 const adminRoute = require("./Routes/adminRoute");
 const bookRoute = require("./Routes/bookRoute");
+const bookOperationRoute = require("./Routes/bookOperationRoute");
 const employeeRoute = require("./Routes/employeeRoute");
 const memberRoute = require("./Routes/memberRoute");
+const reportRoute = require("./Routes/reportsRoute");
 
-// mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
-mongoose.connect("mongodb://127.0.0.1:27017/Library")
+mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
+// mongoose.connect("mongodb://127.0.0.1:27017/Library")
 
     .then(() => {
         console.log("database connected");
@@ -32,8 +34,10 @@ app.use(express.json());
 app.use(basicAdminRoute);
 app.use(adminRoute);
 app.use(bookRoute);
+app.use(bookOperationRoute);
 app.use(employeeRoute);
 app.use(memberRoute);
+app.use(reportRoute);
 
 
 app.use((request, response) => {
