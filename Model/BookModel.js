@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { boolean } = require("webidl-conversions");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const bookSchema = new mongoose.Schema({
@@ -127,7 +126,6 @@ const bookSchema = new mongoose.Schema({
       message: "Please enter a valid positive integer",
     },
   },
-  available: Boolean,
   shelfNo: {
     type: Number,
     validate: {

@@ -323,7 +323,7 @@ exports.bookAction = async (request, response, next) => {
       })
         .save() // insertOne
         .then((data) => {
-          if (request.body.operationOnBook == "borrowing")
+          if (request.body.operationOnBook == "borrowing"){
             bookSchema.updateOne(
               { _id: request.body.bookId },
               {
@@ -334,6 +334,7 @@ exports.bookAction = async (request, response, next) => {
                 },
               }
             );
+          }
           else
             bookSchema.updateOne(
               { _id: request.body.bookId },
@@ -363,8 +364,7 @@ exports.bookReturn = async (request, response, next) => {
     if (findBook == null) throw new Error("book not found");
     let findMember = await memberSchema.findOne({ _id: request.body.memberId });
     if (findMember == null) throw new Error("member not found");
-    let findEmp = await employeeSchema.findOne({ _id: request.body.empId });
-    if (findEmp == null) throw new Error("employee not found");
+    
     let checkreturn = await bookOperattion.findOne({
       bookId: request.body.bookId,
       memberId: request.body.memberId,

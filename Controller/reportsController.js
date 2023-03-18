@@ -5,7 +5,7 @@ require("./../Model/adminModel");
 require("./../Model/memberModel");
 require("./../Model/employeeModel");
 //getter
-const adminSchema = mongoose.model("admins");
+const adminSchema = mongoose.model("admins","system");
 const employeeSchema = mongoose.model("employees");
 const memberSchema = mongoose.model("member");
 const bookSchema = mongoose.model("book");
