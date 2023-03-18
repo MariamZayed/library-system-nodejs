@@ -47,7 +47,7 @@ let employeeSchema = new mongoose.Schema({
     type: Date,
     min: "1980-01-1",
     max: "1999-01-1",
-  },
+},
   hireDate: { type: Date, immutable: true },
 
   salary: {

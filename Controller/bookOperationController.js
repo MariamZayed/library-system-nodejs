@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 require("./../Model/BookOperation");
+require("./../Model/memberModel");
+require("./../Model/employeeModel");
+require("./../Model/BookModel");
 //getter
 const bookSchema = mongoose.model("book");
+const memberSchema = mongoose.model("member");
+const employeeSchema = mongoose.model("employees");
 const bookOperattion = mongoose.model("bookOperattion");
 // functions of member//
 
@@ -294,9 +299,9 @@ exports.bookAction = async (request, response, next) => {
   try {
     let findBook = await bookSchema.findOne({ _id: request.body.bookId });
     if (findBook == null) throw new Error("book not found");
-    let findMember = await member.findOne({ _id: request.body.memberId });
+    let findMember = await memberSchema.findOne({ _id: request.body.memberId });
     if (findMember == null) throw new Error("member not found");
-    let findEmp = await employee.findOne({ _id: request.body.empId });
+    let findEmp = await employeeSchema.findOne({ _id: request.body.empId });
     if (findEmp == null) throw new Error("employee not found");
     // add [&& return] to the next if after the ("get" from transaction schema) function is done
     let checkreturn = await bookOperattion.findOne({
@@ -317,20 +322,38 @@ exports.bookAction = async (request, response, next) => {
         isReturn: false,
       })
         .save() // insertOne
-        .then((data) => {
-          if (request.body.operationOnBook == "borrowing")
-            bookSchema.updateOne(
-              { _id: request.body.bookId },
-              { $inc: { noOfBorrowedCopies: 1, noOfAvailableCopies: -1 } }
+        .then(async (data) => {
+          if (request.body.operationOnBook == "borrowing") {
+            console.log(
+              await bookSchema.updateOne(
+                { _id: request.body.bookId },
+                {
+                  $inc: {
+                    noOfBorrowedCopies: 1,
+                    timesOfBorrowing: 1,
+                    noOfAvailableCopies: -1,
+                  },
+                }
+              )
             );
-          else
-            bookSchema.updateOne(
-              { _id: request.body.bookId },
-              { $inc: { noOfreadingCopies: 1, noOfAvailableCopies: -1 } }
+          } else {
+            console.log(
+              await bookSchema.updateOne(
+                { _id: request.body.bookId },
+                {
+                  $inc: {
+                    noOfreadingCopies: 1,
+                    timesOfReading: 1,
+                    noOfAvailableCopies: -1,
+                  },
+                }
+              )
             );
-
+          }
+          // console.log(lll);
           response.status(201).json({ data });
         })
+
         .catch((error) => next(error));
     }
   } catch (error) {
@@ -357,10 +380,9 @@ exports.bookReturn = async (request, response, next) => {
   try {
     let findBook = await bookSchema.findOne({ _id: request.body.bookId });
     if (findBook == null) throw new Error("book not found");
-    let findMember = await member.findOne({ _id: request.body.memberId });
+    let findMember = await memberSchema.findOne({ _id: request.body.memberId });
     if (findMember == null) throw new Error("member not found");
-    let findEmp = await employee.findOne({ _id: request.body.empId });
-    if (findEmp == null) throw new Error("employee not found");
+
     let checkreturn = await bookOperattion.findOne({
       bookId: request.body.bookId,
       memberId: request.body.memberId,
@@ -412,61 +434,67 @@ exports.getAllBookOperations = (request, response) => {
     });
 };
 
-
-// current borrowing books and return date 
 exports.getCurentBooksBorrow = (request, response, next) => {
-    //get current month from fist day to last day of month
-    const date = new Date();
-    const year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let f = new Date(year, month, 1).getDate();
-    let l = new Date(year, month, 0).getDate();
-    //format
-    f = f < 10 ? '0'+f : f;
-    l = l < 10 ? '0'+l : l;
-    month = month < 10 ? '0'+month : month;
+  //get current month from fist day to last day of month
+  const date = new Date();
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let f = new Date(year, month, 1).getDate();
+  let l = new Date(year, month, 0).getDate();
+  //format
+  f = f < 10 ? '0'+f : f;
+  l = l < 10 ? '0'+l : l;
+  month = month < 10 ? '0'+month : month;
+
+  const firstDay = new Date(`${year}-${month}-${f}`);
+  const lastDay = new Date(`${year}-${month}-${l}`);
+  //console.log(firstDay,lastDay)
+  bookOperattion.aggregate([ 
+  {
+      $match:
+      {
+          operationOnBook:{$eq:"borrowing"},
+          startOperation:{
+            $gte :new Date (`${firstDay}`),
+            $lte:new Date (`${lastDay}`)
+          },
+          isReturn:{$eq:"false"},
+          //memberId:{$eq:request.id}
+      }
+  }// stage1
+  ,
+  {
+    $lookup: {
+      from: "books",
+      localField: "bookId",
+      foreignField: "_id",
+      as: "borrowBooks"
+  }
+  },
+  {
+ $project:
+      {
+            startOperation:1,
+            return:1,
+            operationOnBook:1,
+            memberId:1,
+            borrowBooks:"$borrowBooks"
+      }
+  }// stage2
   
-    const firstDay = new Date(`${year}-${month}-${f}`);
-    const lastDay = new Date(`${year}-${month}-${l}`);
-    //console.log(firstDay,lastDay)
-    bookOperattion.aggregate([ 
-    {
-        $match:
-        {
-            operationOnBook:{$eq:"borrowing"},
-            startOperation:{
-              $gte :new Date (`${firstDay}`),
-              $lte:new Date (`${lastDay}`)
-            },
-            isReturn:{$eq:"false"},
-            //memberId:{$eq:request.id}
-        }
-    }// stage1
-    ,
-    {
-      $lookup: {
-        from: "books",
-        localField: "bookId",
-        foreignField: "_id",
-        as: "borrowBooks"
-    }
-    },
-    {
-   $project:
-        {
-              startOperation:1,
-              return:1,
-              operationOnBook:1,
-              memberId:1,
-              borrowBooks:"$borrowBooks"
-        }
-    }// stage2
-    
-  ])
-  .then((data) => {
-        response.status(200).json({ data });
-      })
-      .catch((error) => next(error));
-  
-  
+])
+.then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
+
+
 }
+exports.returnDate = (request, response, next) => {
+  bookOperattion
+    .find({ dateReturn: { $lte: Date.now() }, isReturn: false })
+    .then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
+};

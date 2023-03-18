@@ -1,9 +1,12 @@
 const mongoose=require("mongoose");
+const AutoIncrement = require("mongoose-sequence")(mongoose);
+
 
 const schema=new mongoose.Schema({
-bookId:{
+    _id:Number,
+    bookId:{
     type:Number,
-    ref:"books",
+    ref:"book",
     required:true
 },
 
@@ -39,6 +42,11 @@ isReturn:{
     default:false
 }
 })
+
+}, {_id:false})
+
+schema.plugin(AutoIncrement, { id: "bookOperation_id", inc_field: "_id" });
+
 
 mongoose.model("bookOperattion",schema);
 

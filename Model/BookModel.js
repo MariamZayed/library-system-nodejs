@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
-const { boolean } = require("webidl-conversions");
-const AutoIncrement = require('mongoose-sequence')(mongoose);
-
+const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const bookSchema = new mongoose.Schema({
   _id: Number,
@@ -9,7 +7,7 @@ const bookSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: function (v) {
-        return /^[a-zA-Z0-9]*$/.test(v);
+        return /^[a-zA-Z0-9 ]*$/.test(v);
       },
       message: "Please enter a valid name",
     },
@@ -35,15 +33,9 @@ const bookSchema = new mongoose.Schema({
     },
     required: [true, "Publisher is required"],
   },
-  // Date is like this: 02-09-2009
+  // Date is like this: 2009-09-02
   publishingDate: {
-    type: String,
-    validate: {
-      validator: function (v) {
-        return /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/.test(v);
-      },
-      message: "Please enter a valid date",
-    },
+    type: Date,
   },
   category: {
     type: String,
@@ -56,6 +48,8 @@ const bookSchema = new mongoose.Schema({
         "Horror",
         "Historical",
         "Romance",
+        "Philosophy",
+        "Fiction",
       ],
       message: "{Values} is not a category",
     },
@@ -132,7 +126,7 @@ const bookSchema = new mongoose.Schema({
       message: "Please enter a valid positive integer",
     },
   },
-  available: Boolean,
+  available:Number,
   shelfNo: {
     type: Number,
     validate: {
@@ -142,19 +136,12 @@ const bookSchema = new mongoose.Schema({
       message: "Please enter a valid positive integer",
     },
   },
-  // Date is like this: 02-09-2009
+  // Date is like this: 2009-09-02
   arrivalDate: {
-    type: String,
-    validate: {
-      validator: function (v) {
-        return /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/.test(v);
-      },
-      message: "Please enter a valid date",
-    },
+    type: Date,
   },
 });
 
-bookSchema.plugin(AutoIncrement,{id: 'books_id', inc_field: "_id"});
-
+bookSchema.plugin(AutoIncrement, { id: "books_id", inc_field: "_id" });
 
 mongoose.model("book", bookSchema);
