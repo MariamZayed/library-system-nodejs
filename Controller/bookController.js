@@ -103,7 +103,7 @@ exports.getOneBook = (request, response, next) => {
     })
     .catch((error) => next(error));
 };
-
+//member
 exports.getArrivalBook = (request, response) => {
   const date = new Date();
   const year = date.getFullYear();
@@ -265,37 +265,8 @@ exports.searchBookByAuthor=(request,response,next)=>{
         .catch((error) => next(error));
 };
 
-exports.searchBookByYear=(request,response,next)=>{
-    const year = request.params.year * 1;
-        // *1 to convert it to number
-    bookSchema.aggregate([ 
-    {
-        $match:
-        {
-            publishingDate:{
-                $gte :new Date (`${year}-01-01`),
-                $lte :new Date (`${year}-12-31`)
-            },          
-        }
-    }// stage1
-    ,
-    {
-    $project:
-        {
-                title:1,
-                author:1,
-                publisher:1,
-                publishingDate:1,
-                category:1
-        }
-    }// stage2
-    ])
-    
-    .then((data) => {
-        response.status(200).json({ data });
-        })
-        .catch((error) => next(error));
-};
+
+//end member//
 
 // -------- Start Noor -----
 exports.mostBorrowedBooks = (request,response, next) => {
@@ -420,10 +391,5 @@ exports.getAvailableBooks=(request,response,next)=>{
 };
 
 // -------- End Noor -----
-//member//
-//search book by available
-// toDo
-//
 
-//end member//
 

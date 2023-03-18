@@ -19,9 +19,12 @@ router
     .get(controller.readingBookByYearandMonth)
 
 router
-    .route("/book/getCurentBooksBorrow")
+    .route("/book/CurentBooksBorrow")
     .get(controller.getCurentBooksBorrow)
-
+router
+    .route("/book/numOfBorrowedBooks")
+    .get(controller.numOfBorrowedBooks)
+    
 router
     .route("/bookaction")
     .get(controller.getAllBookOperations)

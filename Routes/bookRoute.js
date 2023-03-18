@@ -28,6 +28,19 @@ router
 router
   .route("/book/searchBookByYear/:year")
   .get(controller.searchBookByYear)
+  router
+  .route("/book/searchBookByYear/:year")
+  .get(controller.searchBookByYear)
+  router
+  .route("/book/searchBookByCatagery/:Catagery")
+  .get(controller.searchBookByCatagery)
+  router
+  .route("/book/searchBookByPublisher/:Publisher")
+  .get(controller.searchBookByPublisher    )
+  router
+  .route("/book/searchBookByAuthor/:Author")
+  .get(controller.searchBookByAuthor    )
+
   
 router
   .get("/book/:id", controller.getOneBook);

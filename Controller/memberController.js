@@ -41,14 +41,13 @@ exports.updateMember=(request,response,next)=>{
         _id: request.body.id,
       })
         .then((data) => {
-          // if (request.role == "employee") {
-          // if ((request.body.id = !request.id)) {
-          //   throw new Error("Not Authorized to update Data");
-          // }
-          //   delete request.body.email;
-          //   delete request.body.hireDate;
-          //   delete request.body.salary;
-          // }
+          if (request.role == "member") {
+          if ((request.body.id = !request.id)) {
+            throw new Error("Not Authorized to update Data");
+          }
+            delete request.body.email;
+      
+          }
           if (request.file && data.image)
             fs.unlinkSync(
               path.join(__dirname, "..", "images", `${data.image}`)

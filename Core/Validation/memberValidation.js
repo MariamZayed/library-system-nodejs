@@ -1,6 +1,6 @@
 const { body, param, query } = require("express-validator");
 
-exports.post = [
+exports.postValidator = [
     body("fullName").isString().withMessage("First Name must be string"),
     body("password").isLength({min: 8}).withMessage("Password Must be Min length 8"),
     body("email").isEmail().withMessage("Invalid Email Format"),
@@ -11,7 +11,7 @@ exports.post = [
     body("fullAddress.building").isInt().withMessage("Invalid building"),
 ];
 
-exports.update = [
+exports.putValidator = [
     body("id").isNumeric().withMessage("Id Shoud be Number"),
     body("fullName").optional().isString().withMessage("First Name must be string"),
     body("password").optional().isLength({min: 8}).withMessage("Password Must be Min length 8"),
@@ -23,18 +23,18 @@ exports.update = [
     body("fullAddress.building").optional().isInt().withMessage("Invalid building"),
 ];
 
-exports.delete = [
+exports.deleteValidator = [
     body("id").isNumeric().withMessage("Id Shoud be Number"),
 ]
 
-exports.getById = [
+exports.getByIdValidate = [
     param("id").isNumeric().withMessage("Id Shoud be Number"),
 ]
 
-exports.getByEmail = [
-    param("email").isEmail().withMessage("Id Shoud be Number"),
+exports.getByEmailValidate = [
+    param("email").isEmail().withMessage("email is not valid"),
 ]
-exports.getByName = [
-    param("name").isEmail().withMessage("Id Shoud be Number"),
+exports.getByNameValidate = [
+    param("name").isString().withMessage("name Shoud be string"),
 ]
 
