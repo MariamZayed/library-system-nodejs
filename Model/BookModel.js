@@ -17,7 +17,7 @@ const bookSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: function (v) {
-        return /^[a-zA-Z ]*$/.test(v);
+        return /^[a-zA-Z]*$/.test(v);
       },
       message: "Please enter a valid name",
     },

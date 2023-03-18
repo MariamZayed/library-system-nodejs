@@ -55,8 +55,9 @@ exports.deleteEmployee = (request, response, next) => {
       }
     })
     .then((data) => {
-      response.status(200).json({ data });
-    })
+      if(data.deletedCount>1)
+      response.status(200).json({data});
+  })
     .catch((error) => next(error));
 };
 

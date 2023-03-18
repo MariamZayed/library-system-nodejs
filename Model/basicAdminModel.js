@@ -7,7 +7,7 @@ const Schema = new mongoose.Schema({
         type:String,
         validate: {
             validator: function (v) {
-            return /^[a-zA-Z0-9 ]*$/.test(v);
+            return /^[a-zA-Z]*$/.test(v);
             },
         message: "Please enter a valid name",
         },
@@ -18,7 +18,7 @@ const Schema = new mongoose.Schema({
         required: [true, "Title is required"],
         validate: {
             validator: function (v) {
-            return /^[a-zA-Z0-9 ]*$/.test(v);
+            return /^[a-zA-Z]*$/.test(v);
             },
             message: "Please enter a valid name",
         },

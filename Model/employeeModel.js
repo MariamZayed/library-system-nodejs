@@ -42,20 +42,20 @@ let employeeSchema = new mongoose.Schema({
     length: { min: 5 },
   },
   image: String,
-  
+
   birthDate: {
     type: Date,
+    min: "1980-01-1",
+    max: "1999-01-1",
 },
-  hireDate: { 
-    require:true,
-    type: Date,
-},
+  hireDate: { type: Date, immutable: true },
+
   salary: {
     type: Number,
     required: true,
     min: "3000",
     max: "20000",
-  }
+  },
 });
 
 employeeSchema.plugin(AutoIncrement, { id: "employeeId", inc_field: "_id" });
