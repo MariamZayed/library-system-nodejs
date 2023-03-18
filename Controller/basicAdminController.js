@@ -46,7 +46,7 @@ exports.updateBasicAdmin=(request,response,next)=>{
             
         }
         if(request.file){
-            fs.unlinkSync(path.join(__dirname,"..","images","basicAdmin",`${data.image}`));
+            fs.unlinkSync(path.join(__dirname,"..","images",`${data.image}`));
 
         }   
         return basicAdminSchema.updateOne({//Use return because use of two query actions 
@@ -54,7 +54,7 @@ exports.updateBasicAdmin=(request,response,next)=>{
         },{
             $set:{
                 lastName:request.body.lastName,
-                password:request.body.password,
+                password: bcrypt.hashSync(request.body.password, salt),
                 email:request.body.email,
                 birthdate:request.body.birthdate,
                 hireDate:request.body.hireDate,

@@ -56,6 +56,7 @@ let employeeSchema = new mongoose.Schema({
     min: "3000",
     max: "20000",
   },
+  isActivated: {type:Boolean, default: false},
 });
 
 employeeSchema.plugin(AutoIncrement, { id: "employeeId", inc_field: "_id" });

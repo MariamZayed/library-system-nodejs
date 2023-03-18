@@ -68,6 +68,7 @@ const memberSchema = new mongoose.Schema({
     ref: "books",
     required: true,
   },
+  isActivated: {type:Boolean, default: false},
 });
 
 memberSchema.plugin(AutoIncrement, { id: "memberId", inc_field: "_id" });

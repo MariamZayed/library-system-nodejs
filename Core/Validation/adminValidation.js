@@ -24,3 +24,8 @@ exports.update = [
 exports.delete = [
     body("id").isNumeric().withMessage("Id Shoud be Number"),
 ]
+
+exports.getById = [
+    param("id").isNumeric().withMessage("Id Shoud be Number"),
+]
+
