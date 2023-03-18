@@ -4,9 +4,9 @@ exports.post = [
   body("title").isString().withMessage("Title must be string"),
   body("author").isString().withMessage("Author must be string"),
   body("publisher").isString().withMessage("Publisher must be string"),
-  body("publishingDate").isString().withMessage("Invalid Date"),
+  body("publishingDate").isDate().withMessage("Invalid Date"),
   body("category").isString().withMessage("Category must be string"),
-  body("arrivalDate").isString().withMessage("Invalid Date"),
+  body("arrivalDate").isDate().withMessage("Invalid Date"),
   body("edition").isNumeric().withMessage("Edition Must be Number"),
   body("pages").isNumeric().withMessage("Pages Must be Number"),
   body("totalNoOfCopies")
@@ -34,9 +34,9 @@ exports.update = [
   body("title").optional().isString().withMessage("Title must be string"),
   body("author").optional().isString().withMessage("Author must be string"),
   body("publisher").optional().isString().withMessage("Publisher must be string"),
-  body("publishingDate").optional().isString().withMessage("Invalid Date"),
+  body("publishingDate").optional().isDate().withMessage("Invalid Date"),
   body("category").optional().isString().withMessage("Category must be string"),
-  body("arrivalDate").optional().isString().withMessage("Invalid Date"),
+  body("arrivalDate").optional().isDate().withMessage("Invalid Date"),
   body("edition").optional().isNumeric().withMessage("Edition Must be Number"),
   body("pages").optional().isNumeric().withMessage("Pages Must be Number"),
   body("totalNoOfCopies")

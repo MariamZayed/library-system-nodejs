@@ -14,16 +14,19 @@ const employeeRoute = require("./Routes/employeeRoute");
 const memberRoute = require("./Routes/memberRoute");
 const reportRoute = require("./Routes/reportsRoute");
 
-mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
-// mongoose.connect("mongodb://127.0.0.1:27017/Library")
+mongoose
+  .connect(
+    "mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority"
+  )
+  // mongoose.connect("mongodb://127.0.0.1:27017/Library")
 
-    .then(() => {
-        console.log("database connected");
-        app.listen(port,()=>{
-            console.log("server connected....");
-        })
-    })
-    .catch((error)=> console.log(`DB connection error ${error}`))
+  .then(() => {
+    console.log("database connected");
+    app.listen(port, () => {
+      console.log("server connected....");
+    });
+  })
+  .catch((error) => console.log(`DB connection error ${error}`));
 
 app.use(morgan("combined"));
 app.use(express.json());
@@ -39,14 +42,12 @@ app.use(employeeRoute);
 app.use(memberRoute);
 app.use(reportRoute);
 
-
 app.use((request, response) => {
-    response.status(404).json({ message: "Not Found" });
+  response.status(404).json({ message: "Not Found" });
 });
 
 //Middlewre 3--- Error ----
-app.use((error,request,response,next)=>{
-    response.status(500).json({message:error+""});
-    if(request.file && request.file.path)
-    fs.unlinkSync(request.file.path);
+app.use((error, request, response, next) => {
+  response.status(500).json({ message: error + "" });
+  if (request.file && request.file.path) fs.unlinkSync(request.file.path);
 });

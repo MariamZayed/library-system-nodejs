@@ -322,33 +322,38 @@ exports.bookAction = async (request, response, next) => {
         isReturn: false,
       })
         .save() // insertOne
-        .then((data) => {
-          if (request.body.operationOnBook == "borrowing"){
-            bookSchema.updateOne(
-              { _id: request.body.bookId },
-              {
-                $inc: {
-                  noOfBorrowedCopies: 1,
-                  timesOfBorrowing: 1,
-                  noOfAvailableCopies: -1,
-                },
-              }
+        .then(async (data) => {
+          if (request.body.operationOnBook == "borrowing") {
+            console.log(
+              await bookSchema.updateOne(
+                { _id: request.body.bookId },
+                {
+                  $inc: {
+                    noOfBorrowedCopies: 1,
+                    timesOfBorrowing: 1,
+                    noOfAvailableCopies: -1,
+                  },
+                }
+              )
+            );
+          } else {
+            console.log(
+              await bookSchema.updateOne(
+                { _id: request.body.bookId },
+                {
+                  $inc: {
+                    noOfreadingCopies: 1,
+                    timesOfReading: 1,
+                    noOfAvailableCopies: -1,
+                  },
+                }
+              )
             );
           }
-          else
-            bookSchema.updateOne(
-              { _id: request.body.bookId },
-              {
-                $inc: {
-                  noOfreadingCopies: 1,
-                  timesOfReading: 1,
-                  noOfAvailableCopies: -1,
-                },
-              }
-            );
-
+          // console.log(lll);
           response.status(201).json({ data });
         })
+
         .catch((error) => next(error));
     }
   } catch (error) {
@@ -364,7 +369,7 @@ exports.bookReturn = async (request, response, next) => {
     if (findBook == null) throw new Error("book not found");
     let findMember = await memberSchema.findOne({ _id: request.body.memberId });
     if (findMember == null) throw new Error("member not found");
-    
+
     let checkreturn = await bookOperattion.findOne({
       bookId: request.body.bookId,
       memberId: request.body.memberId,
@@ -414,4 +419,13 @@ exports.getAllBookOperations = (request, response) => {
     .catch((error) => {
       next(error);
     });
+};
+
+exports.returnDate = (request, response, next) => {
+  bookOperattion
+    .find({ dateReturn: { $lte: Date.now() }, isReturn: false })
+    .then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
 };

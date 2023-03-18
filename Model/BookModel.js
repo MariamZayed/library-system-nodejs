@@ -126,6 +126,7 @@ const bookSchema = new mongoose.Schema({
       message: "Please enter a valid positive integer",
     },
   },
+  available:Number,
   shelfNo: {
     type: Number,
     validate: {
