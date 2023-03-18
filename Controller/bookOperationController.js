@@ -291,6 +291,92 @@ exports.searchBookByAuthor = (request, response, next) => {
 };
 ///// End of Searching //////////
 
+// current borrowing books and return date 
+exports.getCurentBooksBorrow = async (request, response, next) => {
+  let finalData = {};
+	const endDate = await bookOperattion.aggregate([
+		{
+			$match: {
+				operationOnBook: "borrowing",
+				memberId: { $eq: request.id},
+				isReturned:false 
+			},
+		}, // stage1,
+		{
+			$project: {
+				_id: 0,
+				dateReturn: 1,
+			},
+		}, // stage2
+	]);
+
+	let warning = false;
+	endDate.forEach((element) => {
+		if (new Date(element.dateReturn) < new Date(Date.now())) warning = true;
+	});
+
+	const curr = await bookOperattion.aggregate([
+		{
+			$match: {
+			
+          operationOnBook:{$eq:"borrowing"},
+          isReturn:{$eq:"false"},
+          memberId:{$eq:request.id}
+			},
+		}, // stage1
+		{
+		    $lookup: {
+      from: "books",
+      localField: "bookId",
+      foreignField: "_id",
+      as: "borrowBooks"
+        }
+		},
+		{
+			$project: {
+        startOperation:1,
+        isReturn:1,
+        operationOnBook:1,
+        memberId:1,
+        dateReturn:1,
+				title: { $arrayElemAt: ["$borrowBooks.title", 0] },
+			},
+		}, // stage2
+	])
+  
+  .then((data) => {
+		response.status(200).json({ data });
+	})
+	.catch((error) => next(error));
+
+	if (warning) {
+		finalData.Warn = "I am Warning You ";
+	}
+	finalData.currentBook = curr;
+	response.status(200).json({ finalData });
+};
+
+// number of borrowed times for any books
+exports.numOfBorrowedBooks = async (request, response, next) => {
+	const curr = await bookOperattion.aggregate([
+		{
+			$match: {
+          operationOnBook:{$eq:"borrowing"},
+			},
+		}, // stage1
+      {
+        $group: {
+          _id: "$bookId",
+          Total_Number_Of_Operation: { $sum: 1 },
+        },
+      }, // stage2
+	])
+  .then((data) => {
+		response.status(200).json({ data });
+	})
+	.catch((error) => next(error));
+};
+
 //end member//
 
 // add new borrow book
