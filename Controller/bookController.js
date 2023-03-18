@@ -104,7 +104,6 @@ exports.getOneBook = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-//arrivalBook
 exports.getArrivalBook = (request, response) => {
   const date = new Date();
   const year = date.getFullYear();
@@ -143,7 +142,6 @@ exports.getArrivalBook = (request, response) => {
     .catch((error) => next(error));
 };
 
-//search book by year
 exports.searchBookByYear=(request,response,next)=>{
     const year = request.params.year * 1;
     
@@ -175,9 +173,8 @@ exports.searchBookByYear=(request,response,next)=>{
           response.status(200).json({ data });
         })
         .catch((error) => next(error));
-    }
+};
     
-//search book by catagery
 exports.searchBookByCatagery=(request,response,next)=>{
     const catagery = request.params.catagery;
     
@@ -206,9 +203,8 @@ exports.searchBookByCatagery=(request,response,next)=>{
         response.status(200).json({ data });
         })
         .catch((error) => next(error));
-} 
+};
 
-//search book by publisher
 exports.searchBookByPublisher=(request,response,next)=>{
     const publisher = request.params.publisher;
     
@@ -237,9 +233,8 @@ exports.searchBookByPublisher=(request,response,next)=>{
         response.status(200).json({ data });
         })
         .catch((error) => next(error));
-    }
+};
     
-//search book by author
 exports.searchBookByAuthor=(request,response,next)=>{
     const author = request.params.author;
     
@@ -268,9 +263,8 @@ exports.searchBookByAuthor=(request,response,next)=>{
         response.status(200).json({ data });
         })
         .catch((error) => next(error));
-    }
+};
 
-//search book by year
 exports.searchBookByYear=(request,response,next)=>{
     const year = request.params.year * 1;
         // *1 to convert it to number
@@ -301,7 +295,131 @@ exports.searchBookByYear=(request,response,next)=>{
         response.status(200).json({ data });
         })
         .catch((error) => next(error));
-    }
+};
+
+// -------- Start Noor -----
+exports.mostBorrowedBooks = (request,response, next) => {
+  bookSchema.aggregate([
+      {
+        $match: {
+          operationOnBook: 'borrowing',
+          startOperation:{
+            $gte: moment(request.body.year).toDate(),
+            $lt: moment(request.body.year).add(1, 'year').toDate(),
+          }
+      },
+      },
+      {
+        $group: {
+          _id: '$bookId',
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+      {
+        $limit: 10,
+      },
+      {
+        $lookup: {
+          from: 'book',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'book',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          count: 1,
+          book: { title: 1, category: 1, author: 1, publisher: 1, publishingDate: 1, edition: 1 },
+        },
+      },
+    ])
+      .then((data) => {
+        response.status(200).json({ data });
+      })
+      .catch((error) => {
+        next(error);
+      });
+};
+
+  exports.mostReadBooks = (request,response, next) => {
+    bookSchema.aggregate([
+        {
+          $match: {
+            operationOnBook: 'reading',
+            startOperation:{
+              $gte: moment(request.body.year).toDate(),
+              $lt: moment(request.body.year).add(1, 'year').toDate(),
+            }
+        },
+        },
+        {
+          $group: {
+            _id: '$bookId',
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $sort: {
+            count: -1,
+          },
+        },
+        {
+          $limit: 10,
+        },
+        {
+          $lookup: {
+            from: 'book',
+            localField: '_id',
+            foreignField: '_id',
+            as: 'book',
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            count: 1,
+            book: { title: 1, category: 1, author: 1, publisher: 1, publishingDate: 1, edition: 1 },
+          },
+        },
+      ])
+        .then((data) => {
+          response.status(200).json({ data });
+        })
+        .catch((error) => {
+          next(error);
+        });
+};
+
+exports.getNewArrivalBooks = (request, response, next) => {
+  bookOperattion
+  // .find()
+  .find({ startOperation: { $gte: moment().subtract(1, 'month').toDate() } }, { __v: 0, startOperation: 0})
+      .then((data) => {
+        response.status(200).json({ data });
+      })
+      .catch((error) => {
+        return null;
+      });
+};
+
+exports.getAvailableBooks=(request,response,next)=>{
+  bookSchema.find({available:{$gt:0}})
+  .then((data)=>{
+    response.status(200).json({data})
+    
+  }
+  ).catch((error)=> {   
+    return null
+ })
+};
+
+// -------- End Noor -----
 //member//
 //search book by available
 // toDo
