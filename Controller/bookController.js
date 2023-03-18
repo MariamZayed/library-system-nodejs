@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 require("./../Model/BookModel");
-require("./../Model/BookOperation");
+require("../Model/BookOperationModel");
 //getter
 const bookSchema = mongoose.model("book");
 

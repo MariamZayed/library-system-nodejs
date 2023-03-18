@@ -2,7 +2,7 @@ const { request, response } = require("express");
 const mongoose = require("mongoose");
 let fs = require("fs")
 require("./../Model/BookModel");
-require("./../Model/BookOperation");
+require("../Model/BookOperationModel");
 require("./../Model/adminModel");
 require("./../Model/memberModel");
 require("./../Model/employeeModel");
@@ -72,7 +72,7 @@ exports.getBooksCounts = (request, response, next) => {
 };
 
 exports.getBookOperations = (request, response, next) => {
-  let report = {
-    [operations.getBooksBorrow,operations.getBooksreading,operations.]
-  }
+  // let report = {
+  //   [operations.getBooksBorrow,operations.getBooksreading,operations.]
+  // }
 };

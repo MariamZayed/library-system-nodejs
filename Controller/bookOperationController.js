@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-require("./../Model/BookOperation");
+require("../Model/BookOperationModel");
 require("./../Model/memberModel");
 require("./../Model/employeeModel");
 require("./../Model/BookModel");
