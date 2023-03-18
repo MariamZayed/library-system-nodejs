@@ -14,16 +14,14 @@ const bookRoute = require("./Routes/bookRoute");
 const bookOperationRoute = require("./Routes/bookOperationRoute");
 const employeeRoute = require("./Routes/employeeRoute");
 const memberRoute = require("./Routes/memberRoute");
-const bookOperationRoute= require("./Routes/bookOperationRoute");
 const reportRoute = require("./Routes/reportsRoute");
 const fs = require("fs");
 
 
-// mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
-mongoose.connect("mongodb://127.0.0.1:27017/Library")
-
-mongoose.connect("mongodb://127.0.0.1:27017/library")
+// mongoose.connect("mongodb://127.0.0.1:27017/library")
 // mongoose.connect("mongodb://127.0.0.1:2666/library?directConnection=true")
+
+mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
 .then(() => {
     console.log("database connected");
     app.listen(port, () => {
@@ -58,6 +56,9 @@ app.use((error,request,response,next)=>{
     response.status(500).json({message:error+""});
     if(request.file && request.file.path)
       fs.unlinkSync(request.file.path);
+});
+
+
 app.use((error, request, response, next) => {
   response.status(500).json({ message: error + "" });
   if (request.file && request.file.path) fs.unlinkSync(request.file.path);
