@@ -7,7 +7,7 @@ const memberSchema = mongoose.model("member");
 
 exports.getAllMember = (request, response, next) => {
   memberSchema
-    .find({})
+    .find({},{password:0})
     .then((data) => {
       response.status(200).json({ data });
     })
@@ -22,9 +22,8 @@ exports.addMember = (request, response, next) => {
     _id: request.body.id,
     fullName: request.body.fullName,
     email: request.body.email,
-    password: request.body.password,
+    password: bcrypt.hashSync(request.body.password, salt),
     phoneNumber: request.body.phonenumber,
-    image: request.body.image,
     birthDate: request.body.birthdate,
     fullAddress: request.body.fulladdress,
     createdAt: request.body.createdat,
@@ -52,7 +51,7 @@ exports.updateMember=(request,response,next)=>{
           // }
           if (request.file && data.image)
             fs.unlinkSync(
-              path.join(__dirname, "..", "images", "member", `${data.image}`)
+              path.join(__dirname, "..", "images", `${data.image}`)
             );
           return memberSchema.updateOne(
             {
@@ -62,7 +61,7 @@ exports.updateMember=(request,response,next)=>{
                 $set:{
                     fullName:request.body.fullName,
                     email: request.body.email,
-                    password:request.body.password,
+                    password: bcrypt.hashSync(request.body.password, salt),
                     phoneNumber:request.body.phonenumber,
                     image: request.body.image,
                     birthDate:request.body.birthdate,
@@ -98,7 +97,7 @@ exports.deleteMember=(request,response,next)=>{
         if (data.image) {
           console.log(data.image);
           fs.unlinkSync(
-            path.join(__dirname, "..", "images", "member", `${data.image}`)
+            path.join(__dirname, "..", "images", `${data.image}`)
           );
         }
         return memberSchema.deleteOne({ _id: request.params.id });

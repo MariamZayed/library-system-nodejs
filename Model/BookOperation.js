@@ -38,7 +38,6 @@ isReturn:{
     type:Boolean,
     default:false
 }
-
 })
 
 mongoose.model("bookOperattion",schema);

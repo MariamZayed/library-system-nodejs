@@ -9,13 +9,24 @@ const EmployeeSchema = mongoose.model("employees");
 
 //Get All Employees
 exports.getAllEmployee = (request, response, next) => {
-  EmployeeSchema.find({})
+  if ( request.role == "empolyee" ){
+    EmployeeSchema.find({}, {password:0})
     .then((data) => {
       response.status(200).json({ data });
     })
     .catch((error) => {
       next(error);
     });
+  }else{
+    EmployeeSchema.find({_id: request.id}, {password:0})
+    .then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => {
+      next(error);
+    });
+  }
+  
 };
 
 //Add an Employee
@@ -39,26 +50,32 @@ exports.addEmployee = (request, response, next) => {
 
 //Delete Employee
 exports.deleteEmployee = (request, response, next) => {
-  EmployeeSchema.findOne({ _id: request.params.id })
-    .then((data) => {
-      console.log(data);
-      if (!data) {
-        throw new Error("Employee not found");
-      } else {
-        if (data.image) {
-          console.log(data.image);
-          fs.unlinkSync(
-            path.join(__dirname, "..", "images", "employees", `${data.image}`)
-          );
+  if (
+    request.role != "empolyee" ||
+    (request.role == "empolyee" && request.params.id == request.id)
+  ) {
+    EmployeeSchema.findOne({ _id: request.params.id })
+      .then((data) => {
+        console.log(data);
+        if (!data) {
+          throw new Error("Employee not found");
+        } else {
+          if (data.image) {
+            console.log(data.image);
+            fs.unlinkSync(
+              path.join(__dirname, "..", "images", `${data.image}`)
+            );
+          }
+          return EmployeeSchema.deleteOne({ _id: request.params.id });
         }
-        return EmployeeSchema.deleteOne({ _id: request.params.id });
-      }
-    })
-    .then((data) => {
-      if(data.deletedCount>1)
-      response.status(200).json({data});
-  })
-    .catch((error) => next(error));
+      })
+      .then((data) => {
+        if (data.deletedCount > 1) response.status(200).json({ data });
+      })
+      .catch((error) => next(error));
+  } else {
+    next(new Error("not have permission"));
+  }
 };
 
 //Search Employee using firstName and lastName
@@ -79,44 +96,44 @@ exports.searchEmployee = (request, response, next) => {
 //Admin can update all
 //employee update except salary, email, hirdate
 exports.updateEmployee = (request, response, next) => {
-  EmployeeSchema.findOne({
-    _id: request.body.id,
-  })
-    .then((data) => {
-      // if (request.role == "employee") {
-      // if ((request.body.id = !request.id)) {
-      //   throw new Error("Not Authorized to update Data");
-      // }
-      //   delete request.body.email;
-      //   delete request.body.hireDate;
-      //   delete request.body.salary;
-      // }
-      if (request.file && data.image)
-        fs.unlinkSync(
-          path.join(__dirname, "..", "images", "employees", `${data.image}`)
-        );
-      return EmployeeSchema.updateOne(
-        {
-          _id: request.body.id,
-        },
-        {
-          $set: {
-            firstName: request.body.firstName,
-            lastName: request.body.lastName,
-            email: request.body.email,
-            hireDate: request.body.hireDate,
-            salary: request.body.salary,
-            password: request.body.password,
-            birthDate: request.body.birthDate,
-            image: request.file?.filename ?? undefined,
-          },
+  if (
+    request.role != "empolyee" ||
+    (request.role == "empolyee" && request.body.id == request.id)
+  ) {
+    EmployeeSchema.findOne({
+      _id: request.body.id,
+    })
+      .then((data) => {
+        if (request.role == "employee") {
+          delete request.body.email;
+          delete request.body.salary;
         }
-      );
-    })
-    .then((data) => {
-      response.status(200).json({ data });
-    })
-    .catch((error) => {
-      next(error);
-    });
+        if (request.file && data.image)
+          fs.unlinkSync(path.join(__dirname, "..", "images", `${data.image}`));
+        return EmployeeSchema.updateOne(
+          {
+            _id: request.body.id,
+          },
+          {
+            $set: {
+              firstName: request.body.firstName,
+              lastName: request.body.lastName,
+              email: request.body.email,
+              salary: request.body.salary,
+              password: bcrypt.hashSync(request.body.password, salt),
+              birthDate: request.body.birthDate,
+              image: request.file?.filename ?? undefined,
+            },
+          }
+        );
+      })
+      .then((data) => {
+        response.status(200).json({ data });
+      })
+      .catch((error) => {
+        next(error);
+      });
+  } else {
+    next(new Error("not have permission"));
+  }
 };

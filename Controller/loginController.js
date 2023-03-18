@@ -1,141 +1,171 @@
+require("./../Model/basicAdminModel");
+require("./../Model/adminModel");
 require("./../Model/memberModel")
+require("./../Model/employeeModel");
 const jwt=require("jsonwebtoken");
 const mongoose=require("mongoose");
+let basicSchema=mongoose.model("basicAdmins");
+let adminSchema=mongoose.model("admins");
+let employeeSchema=mongoose.model("employees");
 let memberSchema=mongoose.model("member");
 const bcrypt = require('bcrypt');
- // todo require 3 schema
+const saltRounds = 10;
+const salt = bcrypt.genSaltSync(saltRounds);
 
-//member
-exports.loginMember=(request,response,next)=>{
-   
-        memberSchema.findOne({email:request.body.email})
-                    .then(data=>{
-                     if(data==null)
-                     {
-                        let error=new Error("not authenticated");
-                        error.status=401;
-                        throw new Error('member not found');
-                     }
-                     else{
-                       
-                        let correctPassword= bcrypt.compare(request.body.password, data.password)
-                        if(!correctPassword)
-                        {
-                           let error=new Error("not authenticated");
-                           error.status=401;
-                           throw new Error('Password Not Valid');
-                        }
-                       
-                     }
-                      // if scema.isActivated == false
-                        // {
-                        //   throw "sorry u should activate"
-                        // }
-                        
-                        
-                    return data
-                    })
-                    .then(data=>{
-                     let token=jwt.sign({id:data._id,role:"member"}, 
-                     "library",
-                     {expiresIn:"24h"})
-                     response.status(200).json({message:"authenticated",token});
-                    })
-                    .catch(error=>next(error))
-}
+const checkMailAndPassword = async (model, request, response, next) => {
+	try {
+		let data = await model.findOne({ email: request.body.email });
+		if (data == null) {
+			throw new Error('either mail or password is wrong');
+		} else {
+			let matched = await bcrypt.compare(request.body.password, data.password);
+			if (!matched) throw new Error('either mail or password is wrong');
+		}
+		return data;
+	} catch (error) { next(error); }
+};
 
-//empolyee
-exports.loginEmpolyee=(request,response,next)=>{
-   memberSchema.findOne({email:request.body.email})
-               .then(data=>{
-                if(data==null)
-                {
-                   let error=new Error("not authenticated");
-                   error.status=401;
-                   throw new Error('employee not found');
-                }
-                else{
-
-                   let correctPassword= bcrypt.compare(request.body.password, data.password)
-                   if(!correctPassword)
-                   {
-                      let error=new Error("not authenticated");
-                      error.status=401;
-                      throw new Error('Password Not Valid');
-                   }
-                  
-                }
-               return data
-               })
-               .then(data=>{
-                let token=jwt.sign({id:data._id,role:"empolyee"}, 
-                "library",
-                {expiresIn:"24h"})
-                response.status(200).json({message:"authenticated",token});
-               })
-               .catch(error=>next(error))
-}
-
-//admin
-exports.loginAdmin=(request,response,next)=>{
-   memberSchema.findOne({email:request.body.email})
-               .then(data=>{
-                if(data==null)
-                {
-                   let error=new Error("not authenticated");
-                   error.status=401;
-                   throw new Error('admin not found');
-                }
-                else{
-
-                   let correctPassword= bcrypt.compare(request.body.password, data.password)
-                   if(!correctPassword)
-                   {
-                      let error=new Error("not authenticated");
-                      error.status=401;
-                      throw new Error('Password Not Valid');
-                   }
-                  
-                }
-               return data
-               })
-               .then(data=>{
-                let token=jwt.sign({id:data._id,role:"admin"}, 
-                "library",
-                {expiresIn:"24h"})
-                response.status(200).json({message:"authenticated",token});
-               })
-               .catch(error=>next(error))
-}
-
-//Basicadmin
 exports.loginBasicAdmin=(request,response,next)=>{
-   memberSchema.findOne({email:request.body.email})
-               .then(data=>{
-                if(data==null)
-                {
-                   let error=new Error("not authenticated");
-                   error.status=401;
-                   throw new Error('BasicAdmin not found');
-                }
-                else{
+   checkMailAndPassword(basicSchema,request,response,next)
+      .then(data=>{
+         if(data.isActivated){
+            let token=jwt.sign({id:data._id,role:"basicAdmin"}, 
+            "library",
+            {expiresIn:"24h"})
+            response.status(200).json({message:"authenticated",token});
+         }else{
+            throw new Error("You didn't activate your account!");
+         }
+         
+      })
+      .catch(error=>next(error))
+}
 
-                   let correctPassword= bcrypt.compare(request.body.password, data.password)
-                   if(!correctPassword)
-                   {
-                      let error=new Error("not authenticated");
-                      error.status=401;
-                      throw new Error('Password Not Valid');
-                   }
-                  
-                }
-               return data
-               })
-               .then(data=>{
-                let token=jwt.sign({id:data._id,role:"basicAdmin"}, 
-                "library",
-                {expiresIn:"24h"})
-                response.status(200).json({message:"authenticated",token});
-               })
-               .catch(error=>next(error))
+exports.loginAdmin=(request,response,next)=>{
+   checkMailAndPassword(adminSchema, request,response,next)
+   .then(data=>{
+      if(data.isActivated){
+         let token=jwt.sign({id:data._id,role:"admin"}, 
+         "library",
+         {expiresIn:"24h"})
+         response.status(200).json({message:"authenticated",token});
+      }else
+         throw new Error ("You didn't activate your account!");
+   })
+   .catch(error=>next(error))
+}
+
+exports.loginEmpolyee=(request,response,next)=>{
+   checkMailAndPassword(employeeSchema,request,response,next)
+      .then(data=>{
+         let token=jwt.sign({id:data._id,role:"empolyee"}, 
+         "library",
+         {expiresIn:"24h"})
+         response.status(200).json({message:"authenticated",token});
+   })
+   .catch(error=>next(error))
+}
+
+exports.loginMember=(request,response,next)=>{
+   checkMailAndPassword(memberSchema,request,response,next)
+      .then(data=>{
+         // if shcema.admin.isactvated == false
+         // {
+         //   throw "sorry u should activate"
+         // }
+         let token=jwt.sign({id:data._id,role:"member"}, 
+         "library",
+         {expiresIn:"24h"})
+         response.status(200).json({message:"authenticated",token});
+      })
+      .catch(error=>next(error))
+}
+
+exports.activateAdmin = (request,response,next) => {
+   checkMailAndPassword(adminSchema, request,response,next)
+   .then(data=>{
+      if(data.isActivated){
+         throw new Error ("You are activated your account!");
+      }else{
+         return adminSchema.updateOne({_id: data.id}, {
+            $set: {
+               image: request.file.filename,
+               password: bcrypt.hashSync(request.body.new_password, salt),
+               isActivated: true
+            }
+         })
+      }
+   }).then(_ => {
+      response.json({"data": "activate successful. please login"})
+   })
+   .catch(error=>next(error))
+
+}
+
+
+
+exports.activatebasicAdmin = (request,response,next) => {
+   checkMailAndPassword(basicSchema, request,response,next)
+   .then(data=>{
+      if(data.isActivated){
+         throw new Error ("You are activated your account!");
+      }else{
+         return basicSchema.updateOne({_id: data.id}, {
+            $set: {
+               image: request.file.filename,
+               password: bcrypt.hashSync(request.body.new_password, salt),
+               isActivated: true
+            }
+         })
+      }
+   }).then(_ => {
+      response.json({"data": "activate successful. please login"})
+   })
+   .catch(error=>next(error))
+
+}
+
+
+
+exports.activateEmployee = (request,response,next) => {
+   checkMailAndPassword(employeeSchema, request,response,next)
+   .then(data=>{
+      if(data.isActivated){
+         throw new Error ("You are activated your account!");
+      }else{
+         return employeeSchema.updateOne({_id: data.id}, {
+            $set: {
+               image: request.file.filename,
+               password: bcrypt.hashSync(request.body.new_password, salt),
+               isActivated: true
+            }
+         })
+      }
+   }).then(_ => {
+      response.json({"data": "activate successful. please login"})
+   })
+   .catch(error=>next(error))
+
+}
+
+
+exports.activateMember = (request,response,next) => {
+   checkMailAndPassword(memberSchema, request,response,next)
+   .then(data=>{
+      if(data.isActivated){
+         throw new Error ("You are activated your account!");
+      }else{
+         return memberSchema.updateOne({_id: data.id}, {
+            $set: {
+               image: request.file.filename,
+               password: bcrypt.hashSync(request.body.new_password, salt),
+               isActivated: true
+            }
+         })
+      }
+   }).then(_ => {
+      response.json({"data": "activate successful. please login"})
+   })
+   .catch(error=>next(error))
+
 }

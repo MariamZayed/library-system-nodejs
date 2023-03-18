@@ -10,27 +10,38 @@ const salt = bcrypt.genSaltSync(saltRounds);
 //getter
 const adminSchema = mongoose.model("admins");
 
-exports.getAllAdmins=(request,response)=>{
-    adminSchema.find({})
-                .then((data)=>{
-                    response.status(200).json({data});        
-                })
-                .catch((error)=>{
-                    next(error);
-                })
+exports.getAllAdmins=(request,response, error)=>{
+    if(request.role == "admin"){
+        adminSchema.find({_id: request.id}, {password: 0})
+        .then((data)=>{
+            response.status(200).json({data});        
+        })
+        .catch((error)=>{
+            next(error);
+        })
+    }else{
+        adminSchema.find({}, {password: 0})
+        .then((data)=>{
+            response.status(200).json({data});        
+        })
+        .catch((error)=>{
+            next(error);
+        })
+    }
 }
 
-exports.getAdminById=(request,response,next)=>{
-    adminSchema.findOne(
-        {_id:request.body.id})
+exports.getAdminById=(request,response,error)=>{
+    if(request.role == "basicAdmin" || (request.role == "admin" && request.params.id == request.id)){
+        adminSchema.findOne({_id:request.params.id})
         .then((data)=>{
-        if(data){
-            response.status(200).json({data}); 
-        }
-        else
+        if(data == null)
             throw new Error("Id not found")
-    })
-    .catch ((error)=> {next(error)});
+        else
+            response.status(200).json({data}); 
+        }).catch ((error)=> {next(error)});
+    }else{
+        next(new Error("not have permission"))
+    }
 }
 
 exports.addAdmin=async(request,response,next)=>{
@@ -42,8 +53,7 @@ exports.addAdmin=async(request,response,next)=>{
         birthdate:request.body.birthdate,
         hireDate:request.body.hiredate,
         salary:request.body.salary,
-        image:request.file?.filename ?? undefined//if no file posted, then make mongo put undefined  
-    }).save()// insertOne
+    }).save()
     .then(data=>{
         console.log(data)
         response.status(201).json({data});
@@ -52,6 +62,7 @@ exports.addAdmin=async(request,response,next)=>{
 }
 
 exports.updateAdmin=(request,response,next)=>{
+    if(request.role == "basicAdmin" || (request.role == "admin" && request.body.id == request.id)){
     adminSchema.findOne({
         _id:request.body.id
     }).then((data)=>{
@@ -59,7 +70,7 @@ exports.updateAdmin=(request,response,next)=>{
             throw new Error(" Admin not found ts");
         }
         if(request.file && data.image){
-            fs.unlinkSync(path.join(__dirname,"..","images","admin",`${data.image}`));
+            fs.unlinkSync(path.join(__dirname,"..","images",`${data.image}`));
         }   
         return adminSchema.updateOne({//Use return because use of two query actions 
             _id:request.body.id
@@ -67,7 +78,7 @@ exports.updateAdmin=(request,response,next)=>{
             $set:{
                 firstName:request.body.firstName,
                 lastName:request.body.lastName,
-                password:request.body.password,
+                password: bcrypt.hashSync(request.body.password, salt),
                 email:request.body.email,
                 birthdate:request.body.birthdate,
                 hireDate:request.body.hireDate,
@@ -77,20 +88,27 @@ exports.updateAdmin=(request,response,next)=>{
         })   
     })
     .then(data=>{
-                response.status(200).json({data});
-        })
-        .catch(error=>next(error));
+        response.status(200).json({data});
+    })
+    .catch(error=>next(error));
+    }else{
+        next(new Error("not have permission"))
+    }
 }
 
 exports.deleteAdmin=(request,response,next)=>{
-    adminSchema.deleteOne({
-        _id:request.body.id
-    }).then(data=>{
-        if(data.deletedCount>0){
-            response.status(200).json({data});
-        }else 
-        throw new Error ("Can't delete not found id ")
-        
-    })
-    .catch(error=>next(error));
+    if(request.role == "basicAdmin" || (request.role == "admin" && request.body.id == request.id)){
+        adminSchema.deleteOne({
+            _id:request.body.id
+        }).then(data=>{
+            if(data.deletedCount>0){
+                response.status(200).json({data});
+            }else 
+            throw new Error ("Can't delete not found id ")
+            
+        })
+        .catch(error=>next(error));
+    }else{
+        next(new Error("not have permission"))
+    }
 }
