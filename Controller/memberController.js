@@ -4,6 +4,9 @@ const path = require("path");
 require("./../Model/memberModel");
 require("./../Model/BookModel");
 const memberSchema = mongoose.model("member");
+const bcrypt = require("bcrypt");
+const saltRound = 10;
+const salt = bcrypt.genSaltSync(saltRound);
 
 exports.getAllMember = (request, response, next) => {
   memberSchema
@@ -16,7 +19,6 @@ exports.getAllMember = (request, response, next) => {
 };
 
 exports.addMember = (request, response, next) => {
-  console.log(request.body.readingBooks);
   //create object from schem then use save as(insert one)
   new memberSchema({
     _id: request.body.id,
@@ -37,18 +39,20 @@ exports.addMember = (request, response, next) => {
 };
 
 exports.updateMember=(request,response,next)=>{
+  let password;
+  if(request.body.password){
+    password =  bcrypt.hashSync(request.body.password, salt);
+  }
     memberSchema.findOne({
         _id: request.body.id,
       })
         .then((data) => {
-          // if (request.role == "employee") {
-          // if ((request.body.id = !request.id)) {
-          //   throw new Error("Not Authorized to update Data");
-          // }
-          //   delete request.body.email;
-          //   delete request.body.hireDate;
-          //   delete request.body.salary;
-          // }
+          if (request.role == "member") {
+          if ((request.body.id = !request.id)) {
+            throw new Error("Not Authorized to update Data");
+          }
+            delete request.body.email;
+          }
           if (request.file && data.image)
             fs.unlinkSync(
               path.join(__dirname, "..", "images", `${data.image}`)
@@ -61,9 +65,9 @@ exports.updateMember=(request,response,next)=>{
                 $set:{
                     fullName:request.body.fullName,
                     email: request.body.email,
-                    password: bcrypt.hashSync(request.body.password, salt),
+                    password: password,
                     phoneNumber:request.body.phonenumber,
-                    image: request.body.image,
+                    image: request.file?.filename ?? undefined,
                     birthDate:request.body.birthdate,
                     fullAddress:request.body.fulladdress,
                     createdAt:request.body.createdat
@@ -95,12 +99,11 @@ exports.deleteMember=(request,response,next)=>{
         throw new Error("member not found");
       } else {
         if (data.image) {
-          console.log(data.image);
           fs.unlinkSync(
             path.join(__dirname, "..", "images", `${data.image}`)
           );
         }
-        return memberSchema.deleteOne({ _id: request.params.id });
+        return memberSchema.deleteOne({ _id: request.body.id });
       }
     })
     .then((data) => {

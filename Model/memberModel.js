@@ -23,9 +23,7 @@ const memberSchema = new mongoose.Schema({
     },
     required: [true, "email  is required"],
   },
-
   password: { type: String, required: true },
-
   phoneNumber: {
     type: String,
     unique: true,
@@ -38,13 +36,15 @@ const memberSchema = new mongoose.Schema({
     required: [true, "User phone number required"],
   },
   image: String,
-
-  birthDate: {
-    type: Date,
-    min: "1940-09-28",
-    max: "2015-05-23",
-  },
-
+  birthdate : {
+    type: String,
+    validate: {
+        validator: function (v) {
+        return /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/.test(v);
+        },
+        message: "Please enter a valid date",
+    }, 
+},
   fullAddress: {
     city: String,
     street: String,
@@ -56,17 +56,6 @@ const memberSchema = new mongoose.Schema({
     //7I dont want it to ever change
     immutable: true,
     require: true,
-  },
-  readingBooks: {
-    type: Array,
-    ref: "books",
-    required: true,
-  },
-
-  borrowBooks: {
-    type: Array,
-    ref: "books",
-    required: true,
   },
   isActivated: {type:Boolean, default: false},
 });

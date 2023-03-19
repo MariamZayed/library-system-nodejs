@@ -9,7 +9,7 @@ const EmployeeSchema = mongoose.model("employees");
 
 //Get All Employees
 exports.getAllEmployee = (request, response, next) => {
-  if ( request.role == "empolyee" ){
+  if ( request.role != "empolyee" ){
     EmployeeSchema.find({}, {password:0})
     .then((data) => {
       response.status(200).json({ data });
@@ -56,12 +56,10 @@ exports.deleteEmployee = (request, response, next) => {
   ) {
     EmployeeSchema.findOne({ _id: request.params.id })
       .then((data) => {
-        console.log(data);
         if (!data) {
           throw new Error("Employee not found");
         } else {
           if (data.image) {
-            console.log(data.image);
             fs.unlinkSync(
               path.join(__dirname, "..", "images", `${data.image}`)
             );
@@ -70,7 +68,7 @@ exports.deleteEmployee = (request, response, next) => {
         }
       })
       .then((data) => {
-        if (data.deletedCount > 1) response.status(200).json({ data });
+        response.status(200).json({ data });
       })
       .catch((error) => next(error));
   } else {
@@ -96,6 +94,10 @@ exports.searchEmployee = (request, response, next) => {
 //Admin can update all
 //employee update except salary, email, hirdate
 exports.updateEmployee = (request, response, next) => {
+  let password;
+  if(request.body.password){
+      password = bcrypt.hashSync(request.body.password, salt);
+  }
   if (
     request.role != "empolyee" ||
     (request.role == "empolyee" && request.body.id == request.id)
@@ -120,7 +122,7 @@ exports.updateEmployee = (request, response, next) => {
               lastName: request.body.lastName,
               email: request.body.email,
               salary: request.body.salary,
-              password: bcrypt.hashSync(request.body.password, salt),
+              password: password,
               birthDate: request.body.birthDate,
               image: request.file?.filename ?? undefined,
             },

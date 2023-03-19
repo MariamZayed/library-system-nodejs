@@ -1,4 +1,4 @@
-const { body, param } = require("express-validator");
+const { body, param, query } = require("express-validator");
 exports.validateEmployee= [
     body("firstName").isString().withMessage("firstName must be a String"),
     body("lastName").isString().withMessage("lastName must be a String"),
@@ -24,4 +24,8 @@ exports.validateEmployee= [
     param("id").isInt().withMessage(" ID must be an Integer"),
   ];
 
+  exports.search = [
+    query("firstName").isString().withMessage("firstname is required"),
+    query("lastName").isString().withMessage("lastName is required"),
+  ];
   

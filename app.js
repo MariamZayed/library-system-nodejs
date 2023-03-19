@@ -18,8 +18,6 @@ const reportRoute = require("./Routes/reportsRoute");
 const fs = require("fs");
 
 
-// mongoose.connect('mongodb+srv://nodejs:q7GOqqPWdQlbkaHH@librarynodejs.ym4zs66.mongodb.net/?retryWrites=true&w=majority')
-// mongoose.connect("mongodb://127.0.0.1:27017/library")
 
 mongoose.connect("mongodb://127.0.0.1:27017/Library")
 // mongoose.connect("mongodb://127.0.0.1:2666/library?directConnection=true")

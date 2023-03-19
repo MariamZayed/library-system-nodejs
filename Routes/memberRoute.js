@@ -1,32 +1,30 @@
 const express = require("express");
-const router = express.Router();
 const controller = require("./../Controller/memberController");
 const upload = require("../Core/helper/uploadImage");
 const authorization = require("../Middleware/authorization");
 const memberValidation = require("./../Core/Validation/memberValidation");
 const validateMW = require("./../Core/Validation/validateMW");
-
-//validation
+const router = express.Router();
 
 router
   .route("/member")
   .all(authorization.checkEmpolyeeAdminandBasic)
   .get(controller.getAllMember)
-  .post(memberValidation.post, validateMW, controller.addMember)
-  .put(
+  .post(memberValidation.postValidator, validateMW, controller.addMember)
+  .patch(
     upload("member"),
-    memberValidation.update,
+    memberValidation.putValidator,
     validateMW,
     controller.updateMember
   )
-  .delete(memberValidation.delete, validateMW, controller.deleteMember);
+  .delete(memberValidation.deleteValidator, validateMW, controller.deleteMember);
 
 //update specified Member.
 router
   .route("/member/:id")
   .get(
     authorization.checkEmpolyeeAdminandBasic,
-    memberValidation.getById,
+    memberValidation.getByIdValidate,
     validateMW,
     controller.getMember
   );
@@ -35,7 +33,7 @@ router
   .route("/member/name/:name")
   .get(
     authorization.checkEmpolyeeAdminandBasic,
-    memberValidation.getByName,
+    memberValidation.getByNameValidate,
     validateMW,
     controller.getMemberbyName
   );
@@ -44,19 +42,9 @@ router
   .route("/member/email/:email")
   .get(
     authorization.checkEmpolyeeAdminandBasic,
-    memberValidation.getByEmail,
+    memberValidation.getByEmailValidate,
     validateMW,
     controller.getMemberbyemail
-  );
-
-//get readingbook by member
-router
-  .route("/member/readingbook/:id")
-  .get(
-    authorization.checkEmpolyeeAdminandBasic,
-    memberValidation.getById,
-    validateMW,
-    controller.getReadingbook
   );
 
 module.exports = router;

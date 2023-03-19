@@ -104,8 +104,7 @@ exports.getOneBook = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-//arrivalBook
-exports.getArrivalBook = (request, response) => {
+exports.getArrivalBook = (request, response, next) => {
   const date = new Date();
   const year = date.getFullYear();
   let month = date.getMonth() + 1;
@@ -143,169 +142,136 @@ exports.getArrivalBook = (request, response) => {
     .catch((error) => next(error));
 };
 
-//search book by year
-exports.searchBookByYear=(request,response,next)=>{
-    const year = request.params.year * 1;
-    
-      // *1 to convert it to number
-     bookSchema.aggregate([ 
+
+///// Start of Searching //////////
+exports.searchBookByYear = (request, response, next) => {
+  const year = request.params.year * 1;
+  // *1 to convert it to number
+  bookSchema
+    .aggregate([
       {
-          $match:
-          {
-              publishingDate:{
-                $gte :new Date (`${year}-01-01`),
-                $lte :new Date (`${year}-12-31`)
-              },          
-          }
-      }// stage1
-      ,
+        $match: {
+          publishingDate: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`),
+          },
+        },
+      }, // stage1
       {
-     $project:
-          {
-                title:1,
-                author:1,
-                publisher:1,
-                publishingDate:1,
-                category:1
-          }
-      }// stage2
+        $project: {
+          title: 1,
+          author: 1,
+          publisher: 1,
+          publishingDate: 1,
+          category: 1,
+        },
+      }, // stage2
     ])
-    
     .then((data) => {
-          response.status(200).json({ data });
-        })
-        .catch((error) => next(error));
-    }
-    
-//search book by catagery
-exports.searchBookByCatagery=(request,response,next)=>{
-    const catagery = request.params.catagery;
-    
-    // *1 to convert it to number
-    bookSchema.aggregate([ 
-    {
-        $match:
-        {
-            category:{$eq:`${catagery}`},          
-        }
-    }// stage1
-    ,
-    {
-    $project:
-        {
-                title:1,
-                author:1,
-                publisher:1,
-                publishingDate:1,
-                category:1
-        }
-    }// stage2
-    ])
-    
-    .then((data) => {
-        response.status(200).json({ data });
-        })
-        .catch((error) => next(error));
-} 
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
+};
 
-//search book by publisher
-exports.searchBookByPublisher=(request,response,next)=>{
-    const publisher = request.params.publisher;
-    
-    // *1 to convert it to number
-    bookSchema.aggregate([ 
-    {
-        $match:
-        {
-            publisher:{$eq:`${publisher}`},          
-        }
-    }// stage1
-    ,
-    {
-    $project:
-        {
-                title:1,
-                author:1,
-                publisher:1,
-                publishingDate:1,
-                category:1
-        }
-    }// stage2
+exports.searchBookByCatagery = (request, response, next) => {
+  const catagery = request.params.Catagery;
+  bookSchema
+    .aggregate([
+      {
+        $match: {
+          category: { $eq: `${catagery}` },
+        },
+      }, // stage1
+      {
+        $project: {
+          title: 1,
+          author: 1,
+          publisher: 1,
+          publishingDate: 1,
+          category: 1,
+        },
+      }, // stage2
     ])
-    
+
     .then((data) => {
-        response.status(200).json({ data });
-        })
-        .catch((error) => next(error));
-    }
-    
-//search book by author
-exports.searchBookByAuthor=(request,response,next)=>{
-    const author = request.params.author;
-    
-    // *1 to convert it to number
-    bookSchema.aggregate([ 
-    {
-        $match:
-        {
-            author:{$eq:`${author}`},          
-        }
-    }// stage1
-    ,
-    {
-    $project:
-        {
-                title:1,
-                author:1,
-                publisher:1,
-                publishingDate:1,
-                category:1
-        }
-    }// stage2
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
+};
+
+exports.searchBookByTitle = (request, response, next) => {
+  const title = request.params.title;
+  // *1 to convert it to number
+  bookSchema
+    .aggregate([
+      {
+        $match: {
+          title: { $eq: `${title}` },
+        },
+      }, // stage1
+      {
+        $project: {
+          title: 1,
+          author: 1,
+          noOfBorrowedCopies: 1,
+          noOfAvailableCopies: 1,
+        },
+      }, // stage2
     ])
-    
-    .then((data) => {
-        response.status(200).json({ data });
-        })
-        .catch((error) => next(error));
-    }
 
-//search book by year
-exports.searchBookByYear=(request,response,next)=>{
-    const year = request.params.year * 1;
-        // *1 to convert it to number
-    bookSchema.aggregate([ 
-    {
-        $match:
-        {
-            publishingDate:{
-                $gte :new Date (`${year}-01-01`),
-                $lte :new Date (`${year}-12-31`)
-            },          
-        }
-    }// stage1
-    ,
-    {
-    $project:
-        {
-                title:1,
-                author:1,
-                publisher:1,
-                publishingDate:1,
-                category:1
-        }
-    }// stage2
+    .then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
+};
+
+exports.searchBookByPublisher = (request, response, next) => {
+  const publisher = request.params.Publisher;
+  // *1 to convert it to number
+  bookSchema
+    .aggregate([
+      {
+        $match: {
+          publisher: { $eq: `${publisher}` },
+        },
+      }, // stage1
+      {
+        $project: {
+          title: 1,
+          publisher: 1,
+          author: 1,
+          noOfBorrowedCopies: 1,
+          noOfAvailableCopies: 1,
+        },
+      }, // stage2
     ])
-    
     .then((data) => {
-        response.status(200).json({ data });
-        })
-        .catch((error) => next(error));
-    }
-//member//
-//search book by available
-// toDo
-//
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
+};
 
-//end member//
-
+exports.searchBookByAuthor = (request, response, next) => {
+  const author = request.params.Author;
+  bookSchema
+    .aggregate([
+      {
+        $match: {
+          author: { $eq: `${author}` },
+        },
+      }, // stage1
+      {
+        $project: {
+          title: 1,
+          author: 1,
+          noOfBorrowedCopies: 1,
+          noOfAvailableCopies: 1,
+        },
+      }, // stage2
+    ])
+    .then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
+};
+///// End of Searching //////////

@@ -33,7 +33,7 @@ exports.getBooksreading = (request, response, next) => {
             $gte: new Date(`${firstDay}`),
             $lte: new Date(`${lastDay}`),
           },
-          // memberId:{$eq:2}
+          memberId:{$eq:request.id}
         },
       }, // stage1
       {
@@ -75,7 +75,7 @@ exports.getBooksBorrow = (request, response, next) => {
             $gte: new Date(`${firstDay}`),
             $lte: new Date(`${lastDay}`),
           },
-          // memberId:{$eq:2}
+          memberId:{$eq:request.id}
         },
       }, // stage1
       {
@@ -106,7 +106,7 @@ exports.borrowBookByYearandMonth = (request, response, next) => {
             $gte: new Date(`${year}-${month}-01`),
             $lte: new Date(`${year}-${month}-31`),
           },
-          // memberId:{$eq:2}
+          memberId:{$eq:request.id}
         },
       }, // stage1
       {
@@ -138,7 +138,7 @@ exports.readingBookByYearandMonth = (request, response, next) => {
             $gte: new Date(`${year}-${month}-01`),
             $lte: new Date(`${year}-${month}-31`),
           },
-          // memberId:{$eq:2}
+          memberId:{$eq:request.id}
         },
       }, // stage1
       {
@@ -157,143 +157,7 @@ exports.readingBookByYearandMonth = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-///// Start of Searching //////////
-exports.searchBookByYear = (request, response, next) => {
-  const year = request.params.year * 1;
-  // *1 to convert it to number
-  bookSchema
-    .aggregate([
-      {
-        $match: {
-          publishingDate: {
-            $gte: new Date(`${year}-01-01`),
-            $lte: new Date(`${year}-12-31`),
-          },
-        },
-      }, // stage1
-      {
-        $project: {
-          title: 1,
-          author: 1,
-          publisher: 1,
-          publishingDate: 1,
-          category: 1,
-        },
-      }, // stage2
-    ])
-    .then((data) => {
-      response.status(200).json({ data });
-    })
-    .catch((error) => next(error));
-};
 
-exports.searchBookByCatagery = (request, response, next) => {
-  const catagery = request.params.catagery;
-  // *1 to convert it to number
-  bookSchema
-    .aggregate([
-      {
-        $match: {
-          category: { $eq: `${catagery}` },
-        },
-      }, // stage1
-      {
-        $project: {
-          title: 1,
-          author: 1,
-          publisher: 1,
-          publishingDate: 1,
-          category: 1,
-        },
-      }, // stage2
-    ])
-
-    .then((data) => {
-      response.status(200).json({ data });
-    })
-    .catch((error) => next(error));
-};
-
-exports.searchBookByTitle = (request, response, next) => {
-  const title = request.params.title;
-  // *1 to convert it to number
-  bookSchema
-    .aggregate([
-      {
-        $match: {
-          title: { $eq: `${title}` },
-        },
-      }, // stage1
-      {
-        $project: {
-          title: 1,
-          author: 1,
-          noOfBorrowedCopies: 1,
-          noOfAvailableCopies: 1,
-        },
-      }, // stage2
-    ])
-
-    .then((data) => {
-      response.status(200).json({ data });
-    })
-    .catch((error) => next(error));
-};
-
-exports.searchBookByPublisher = (request, response, next) => {
-  const publisher = request.params.publisher;
-  // *1 to convert it to number
-  bookSchema
-    .aggregate([
-      {
-        $match: {
-          publisher: { $eq: `${publisher}` },
-        },
-      }, // stage1
-      {
-        $project: {
-          title: 1,
-          publisher: 1,
-          author: 1,
-          noOfBorrowedCopies: 1,
-          noOfAvailableCopies: 1,
-        },
-      }, // stage2
-    ])
-    .then((data) => {
-      response.status(200).json({ data });
-    })
-    .catch((error) => next(error));
-};
-
-exports.searchBookByAuthor = (request, response, next) => {
-  const author = request.params.author;
-  bookSchema
-    .aggregate([
-      {
-        $match: {
-          author: { $eq: `${author}` },
-        },
-      }, // stage1
-      {
-        $project: {
-          title: 1,
-          author: 1,
-          noOfBorrowedCopies: 1,
-          noOfAvailableCopies: 1,
-        },
-      }, // stage2
-    ])
-    .then((data) => {
-      response.status(200).json({ data });
-    })
-    .catch((error) => next(error));
-};
-///// End of Searching //////////
-
-//end member//
-
-// add new borrow book
 
 exports.bookAction = async (request, response, next) => {
   try {
@@ -361,10 +225,6 @@ exports.bookAction = async (request, response, next) => {
   }
 };
 
-// return book
-
-
-//if any member exceeds the return date of borrow books
 exports.returnDate = (request, response, next) => {
     bookOperattion
       .find({ dateReturn: { $lte: Date.now() }, isReturn:false })
@@ -373,8 +233,6 @@ exports.returnDate = (request, response, next) => {
       })
       .catch((error) => next(error));
   };
-
-//end member//
 
 exports.bookReturn = async (request, response, next) => {
   try {
@@ -421,8 +279,6 @@ exports.bookReturn = async (request, response, next) => {
   }
 };
 
-// get all book operations
-
 exports.getAllBookOperations = (request, response) => {
   bookOperattion
     .find({})
@@ -459,7 +315,7 @@ exports.getCurentBooksBorrow = (request, response, next) => {
             $lte:new Date (`${lastDay}`)
           },
           isReturn:{$eq:"false"},
-          //memberId:{$eq:request.id}
+          memberId:{$eq:request.id}
       }
   }// stage1
   ,
@@ -490,6 +346,7 @@ exports.getCurentBooksBorrow = (request, response, next) => {
 
 
 }
+
 exports.returnDate = (request, response, next) => {
   bookOperattion
     .find({ dateReturn: { $lte: Date.now() }, isReturn: false })
