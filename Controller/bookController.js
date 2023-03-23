@@ -105,6 +105,7 @@ exports.getOneBook = (request, response, next) => {
 };
 
 exports.getArrivalBook = (request, response, next) => {
+exports.getArrivalBook = (request, response,next) => {
   const date = new Date();
   const year = date.getFullYear();
   let month = date.getMonth() + 1;
@@ -146,9 +147,7 @@ exports.getArrivalBook = (request, response, next) => {
 ///// Start of Searching //////////
 exports.searchBookByYear = (request, response, next) => {
   const year = request.params.year * 1;
-  // *1 to convert it to number
-  bookSchema
-    .aggregate([
+  bookSchema.aggregate([
       {
         $match: {
           publishingDate: {

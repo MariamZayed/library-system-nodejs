@@ -102,17 +102,23 @@ exports.updateAdmin=(request,response,next)=>{
 
 exports.deleteAdmin=(request,response,next)=>{
     if(request.role == "basicAdmin" || (request.role == "admin" && request.body.id == request.id)){
-        adminSchema.deleteOne({
+        adminSchema.findOne({
             _id:request.body.id
         }).then(data=>{
+            if(!data)
+                throw new Error ("Can't delete not found id ")
+            if (data.image){
+            fs.unlinkSync(path.join(__dirname,"..","images",`${data.image}`));
+            }
+            return adminSchema.deleteOne({ _id: request.body.id });
+        }).then (data=>{
             if(data.deletedCount>0){
                 response.status(200).json({data});
-            }else 
-            throw new Error ("Can't delete not found id ")
-            
-        })
-        .catch(error=>next(error));
-    }else{
-        next(new Error("not have permission"))
+            }
+        }
+        )
+            .catch(error=>next(error));
+            }else{
+                next(new Error("not have permission"))
     }
 }

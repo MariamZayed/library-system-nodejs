@@ -41,6 +41,7 @@ isReturn:{
     type:Boolean,
     default:false
 }
+})
 
 }, {_id:false})
 
