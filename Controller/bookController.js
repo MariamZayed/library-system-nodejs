@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 require("./../Model/BookModel");
-require("./../Model/BookOperation");
+require("../Model/BookOperationModel");
 //getter
 const bookSchema = mongoose.model("book");
 
@@ -104,7 +104,8 @@ exports.getOneBook = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-exports.getArrivalBook = (request, response) => {
+exports.getArrivalBook = (request, response, next) => {
+exports.getArrivalBook = (request, response,next) => {
   const date = new Date();
   const year = date.getFullYear();
   let month = date.getMonth() + 1;
@@ -142,288 +143,134 @@ exports.getArrivalBook = (request, response) => {
     .catch((error) => next(error));
 };
 
-exports.searchBookByYear=(request,response,next)=>{
-    const year = request.params.year * 1;
-    
-      // *1 to convert it to number
-     bookSchema.aggregate([ 
-      {
-          $match:
-          {
-              publishingDate:{
-                $gte :new Date (`${year}-01-01`),
-                $lte :new Date (`${year}-12-31`)
-              },          
-          }
-      }// stage1
-      ,
-      {
-     $project:
-          {
-                title:1,
-                author:1,
-                publisher:1,
-                publishingDate:1,
-                category:1
-          }
-      }// stage2
-    ])
-    
-    .then((data) => {
-          response.status(200).json({ data });
-        })
-        .catch((error) => next(error));
-};
-    
-exports.searchBookByCatagery=(request,response,next)=>{
-    const catagery = request.params.catagery;
-    
-    // *1 to convert it to number
-    bookSchema.aggregate([ 
-    {
-        $match:
-        {
-            category:{$eq:`${catagery}`},          
-        }
-    }// stage1
-    ,
-    {
-    $project:
-        {
-                title:1,
-                author:1,
-                publisher:1,
-                publishingDate:1,
-                category:1
-        }
-    }// stage2
-    ])
-    
-    .then((data) => {
-        response.status(200).json({ data });
-        })
-        .catch((error) => next(error));
-};
 
-exports.searchBookByPublisher=(request,response,next)=>{
-    const publisher = request.params.publisher;
-    
-    // *1 to convert it to number
-    bookSchema.aggregate([ 
-    {
-        $match:
-        {
-            publisher:{$eq:`${publisher}`},          
-        }
-    }// stage1
-    ,
-    {
-    $project:
-        {
-                title:1,
-                author:1,
-                publisher:1,
-                publishingDate:1,
-                category:1
-        }
-    }// stage2
-    ])
-    
-    .then((data) => {
-        response.status(200).json({ data });
-        })
-        .catch((error) => next(error));
-};
-    
-exports.searchBookByAuthor=(request,response,next)=>{
-    const author = request.params.author;
-    
-    // *1 to convert it to number
-    bookSchema.aggregate([ 
-    {
-        $match:
-        {
-            author:{$eq:`${author}`},          
-        }
-    }// stage1
-    ,
-    {
-    $project:
-        {
-                title:1,
-                author:1,
-                publisher:1,
-                publishingDate:1,
-                category:1
-        }
-    }// stage2
-    ])
-    
-    .then((data) => {
-        response.status(200).json({ data });
-        })
-        .catch((error) => next(error));
-};
-
-exports.searchBookByYear=(request,response,next)=>{
-    const year = request.params.year * 1;
-        // *1 to convert it to number
-    bookSchema.aggregate([ 
-    {
-        $match:
-        {
-            publishingDate:{
-                $gte :new Date (`${year}-01-01`),
-                $lte :new Date (`${year}-12-31`)
-            },          
-        }
-    }// stage1
-    ,
-    {
-    $project:
-        {
-                title:1,
-                author:1,
-                publisher:1,
-                publishingDate:1,
-                category:1
-        }
-    }// stage2
-    ])
-    
-    .then((data) => {
-        response.status(200).json({ data });
-        })
-        .catch((error) => next(error));
-};
-
-// -------- Start Noor -----
-exports.mostBorrowedBooks = (request,response, next) => {
+///// Start of Searching //////////
+exports.searchBookByYear = (request, response, next) => {
+  const year = request.params.year * 1;
   bookSchema.aggregate([
       {
         $match: {
-          operationOnBook: 'borrowing',
-          startOperation:{
-            $gte: moment(request.body.year).toDate(),
-            $lt: moment(request.body.year).add(1, 'year').toDate(),
-          }
-      },
-      },
-      {
-        $group: {
-          _id: '$bookId',
-          count: { $sum: 1 },
+          publishingDate: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`),
+          },
         },
-      },
-      {
-        $sort: {
-          count: -1,
-        },
-      },
-      {
-        $limit: 10,
-      },
-      {
-        $lookup: {
-          from: 'book',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'book',
-        },
-      },
+      }, // stage1
       {
         $project: {
-          _id: 1,
-          count: 1,
-          book: { title: 1, category: 1, author: 1, publisher: 1, publishingDate: 1, edition: 1 },
+          title: 1,
+          author: 1,
+          publisher: 1,
+          publishingDate: 1,
+          category: 1,
         },
-      },
+      }, // stage2
     ])
-      .then((data) => {
-        response.status(200).json({ data });
-      })
-      .catch((error) => {
-        next(error);
-      });
+    .then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
 };
 
-  exports.mostReadBooks = (request,response, next) => {
-    bookSchema.aggregate([
-        {
-          $match: {
-            operationOnBook: 'reading',
-            startOperation:{
-              $gte: moment(request.body.year).toDate(),
-              $lt: moment(request.body.year).add(1, 'year').toDate(),
-            }
+exports.searchBookByCatagery = (request, response, next) => {
+  const catagery = request.params.Catagery;
+  bookSchema
+    .aggregate([
+      {
+        $match: {
+          category: { $eq: `${catagery}` },
         },
+      }, // stage1
+      {
+        $project: {
+          title: 1,
+          author: 1,
+          publisher: 1,
+          publishingDate: 1,
+          category: 1,
         },
-        {
-          $group: {
-            _id: '$bookId',
-            count: { $sum: 1 },
-          },
-        },
-        {
-          $sort: {
-            count: -1,
-          },
-        },
-        {
-          $limit: 10,
-        },
-        {
-          $lookup: {
-            from: 'book',
-            localField: '_id',
-            foreignField: '_id',
-            as: 'book',
-          },
-        },
-        {
-          $project: {
-            _id: 1,
-            count: 1,
-            book: { title: 1, category: 1, author: 1, publisher: 1, publishingDate: 1, edition: 1 },
-          },
-        },
-      ])
-        .then((data) => {
-          response.status(200).json({ data });
-        })
-        .catch((error) => {
-          next(error);
-        });
+      }, // stage2
+    ])
+
+    .then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
 };
 
-exports.getNewArrivalBooks = (request, response, next) => {
-  bookOperattion
-  // .find()
-  .find({ startOperation: { $gte: moment().subtract(1, 'month').toDate() } }, { __v: 0, startOperation: 0})
-      .then((data) => {
-        response.status(200).json({ data });
-      })
-      .catch((error) => {
-        return null;
-      });
+exports.searchBookByTitle = (request, response, next) => {
+  const title = request.params.title;
+  // *1 to convert it to number
+  bookSchema
+    .aggregate([
+      {
+        $match: {
+          title: { $eq: `${title}` },
+        },
+      }, // stage1
+      {
+        $project: {
+          title: 1,
+          author: 1,
+          noOfBorrowedCopies: 1,
+          noOfAvailableCopies: 1,
+        },
+      }, // stage2
+    ])
+
+    .then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
 };
 
-exports.getAvailableBooks=(request,response,next)=>{
-  bookSchema.find({available:{$gt:0}})
-  .then((data)=>{
-    response.status(200).json({data})
-    
-  }
-  ).catch((error)=> {   
-    return null
- })
+exports.searchBookByPublisher = (request, response, next) => {
+  const publisher = request.params.Publisher;
+  // *1 to convert it to number
+  bookSchema
+    .aggregate([
+      {
+        $match: {
+          publisher: { $eq: `${publisher}` },
+        },
+      }, // stage1
+      {
+        $project: {
+          title: 1,
+          publisher: 1,
+          author: 1,
+          noOfBorrowedCopies: 1,
+          noOfAvailableCopies: 1,
+        },
+      }, // stage2
+    ])
+    .then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
 };
 
-// -------- End Noor -----
-//member//
-//search book by available
-// toDo
-//
-
-//end member//
-
+exports.searchBookByAuthor = (request, response, next) => {
+  const author = request.params.Author;
+  bookSchema
+    .aggregate([
+      {
+        $match: {
+          author: { $eq: `${author}` },
+        },
+      }, // stage1
+      {
+        $project: {
+          title: 1,
+          author: 1,
+          noOfBorrowedCopies: 1,
+          noOfAvailableCopies: 1,
+        },
+      }, // stage2
+    ])
+    .then((data) => {
+      response.status(200).json({ data });
+    })
+    .catch((error) => next(error));
+};
+///// End of Searching //////////

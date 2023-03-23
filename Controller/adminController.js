@@ -62,7 +62,11 @@ exports.addAdmin=async(request,response,next)=>{
 }
 
 exports.updateAdmin=(request,response,next)=>{
-    if(request.role == "basicAdmin" || (request.role == "admin" && request.body.id == request.id)){
+    let password;
+    if(request.body.password){
+        password = bcrypt.hashSync(request.body.password, salt);
+    }
+    if(request.role != "admin" || (request.role == "admin" && request.body.id == request.id)){
     adminSchema.findOne({
         _id:request.body.id
     }).then((data)=>{
@@ -78,7 +82,7 @@ exports.updateAdmin=(request,response,next)=>{
             $set:{
                 firstName:request.body.firstName,
                 lastName:request.body.lastName,
-                password: bcrypt.hashSync(request.body.password, salt),
+                password: password,
                 email:request.body.email,
                 birthdate:request.body.birthdate,
                 hireDate:request.body.hireDate,

@@ -4,9 +4,9 @@ exports.post = [
   body("title").isString().withMessage("Title must be string"),
   body("author").isString().withMessage("Author must be string"),
   body("publisher").isString().withMessage("Publisher must be string"),
-  body("publishingDate").isDate().withMessage("Invalid Date"),
+  body("publishingDate").isDate().withMessage("publishingDate Invalid Date"),
   body("category").isString().withMessage("Category must be string"),
-  body("arrivalDate").isDate().withMessage("Invalid Date"),
+  body("arrivalDate").isDate().withMessage("arrivalDate Invalid Date"),
   body("edition").isNumeric().withMessage("Edition Must be Number"),
   body("pages").isNumeric().withMessage("Pages Must be Number"),
   body("totalNoOfCopies")
@@ -31,6 +31,7 @@ exports.post = [
 ];
 
 exports.update = [
+  body("id").isInt().withMessage("id must be Number"),
   body("title").optional().isString().withMessage("Title must be string"),
   body("author").optional().isString().withMessage("Author must be string"),
   body("publisher").optional().isString().withMessage("Publisher must be string"),
@@ -67,3 +68,28 @@ exports.update = [
 ];
 
 exports.delete = [body("id").isInt().withMessage("Id Shoud be Number")];
+exports.year = [param("year").isInt().withMessage("year Shoud be Number")];
+exports.id = [param("id").isInt().withMessage("Id Shoud be Number")];
+
+exports.year_month=[
+  param("year").isInt({min: 1800}).withMessage("year Shoud be Number & bigger than 1800"),
+  param("month").isInt({min: 1, max: 12}).withMessage("Invalid Value for Month")
+];
+
+exports.bookAction = [
+  body("bookId").isInt().withMessage("bookId must be Number"),
+  body("memberId").isInt().withMessage("memberId must be Number"),
+  body("empId").isInt().withMessage("empId must be Number"),
+  body("dateReturn").isDate().withMessage("dateReturn must be Date"),
+  body("operationOnBook")
+    .isString({ in: ["reading", "borrowing"]})
+    .withMessage("inValid Value")
+];
+
+exports.bookReturn = [
+  body("bookId").isInt().withMessage("bookId must be Number"),
+  body("memberId").isInt().withMessage("memberId must be Number"),
+  body("operationOnBook")
+    .isString({ in: ["reading", "borrowing"]})
+    .withMessage("inValid Value")
+];

@@ -56,7 +56,8 @@ const Schema = new mongoose.Schema({
     },
     image : { type:String },
     salary : { type:Number, require:true },
-    isActivated:{type:Boolean,default: false}
+    isActivated:{type:Boolean,default: false},
+    isRoot: {type: Boolean, default: false}
 })
 
 Schema.plugin(AutoIncrement,{

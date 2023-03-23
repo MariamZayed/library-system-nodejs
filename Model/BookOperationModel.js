@@ -41,7 +41,9 @@ isReturn:{
     type:Boolean,
     default:false
 }
-},{_id:false})
+})
+
+}, {_id:false})
 
 schema.plugin(AutoIncrement, { id: "bookOperation_id", inc_field: "_id" });
 

@@ -32,13 +32,13 @@ router
   .route("/employee/:id")
   .delete(
     authorization.checkEmpolyeeAdminandBasic,
-    upload("employees"),
     employeeValidation.paramVal,
     validateMW,
     controller.deleteEmployee
   );
 
 //search for firstName and lastName
-router.route("/employee/search").get(validateMW, controller.searchEmployee);
+router.route("/employee/search").get(authorization.checkEmpolyeeAdminandBasic,
+  employeeValidation.search,validateMW, controller.searchEmployee);
 
 module.exports = router;

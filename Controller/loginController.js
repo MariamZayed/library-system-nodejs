@@ -29,9 +29,16 @@ exports.loginBasicAdmin=(request,response,next)=>{
    checkMailAndPassword(basicSchema,request,response,next)
       .then(data=>{
          if(data.isActivated){
-            let token=jwt.sign({id:data._id,role:"basicAdmin"}, 
+            let token;
+            if(data.isRoot){
+                token=jwt.sign({id:data._id,role:"Root"}, 
             "library",
             {expiresIn:"24h"})
+            }else{
+               token=jwt.sign({id:data._id,role:"basicAdmin"}, 
+               "library",
+               {expiresIn:"24h"})
+            }
             response.status(200).json({message:"authenticated",token});
          }else{
             throw new Error("You didn't activate your account!");
