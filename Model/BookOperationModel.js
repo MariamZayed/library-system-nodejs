@@ -8,43 +8,35 @@ const schema=new mongoose.Schema({
     type:Number,
     ref:"book",
     required:true
-},
-
-empId:{
-    type:Number,
-    ref:"employees",
-    required:true
-},
-
-memberId:{
-    type:Number,
-    ref:"member",
-    required:true
-},
-
-operationOnBook:{
-    type: String,
-    enum: ["reading", "borrowing"],
-    required: [true , "Value must be read OR borrow"],  
-},
-
-startOperation:{
-    type: Date, 
-    default: Date.now,
-},
-
-dateReturn:{
-    type: Date, 
-},
-
-isReturn:{
-    type:Boolean,
-    default:false
-}
-})
-
-}, {_id:false})
-
+    },
+    empId:{
+        type:Number,
+        ref:"employees",
+        required:true
+    },
+    memberId:{
+        type:Number,
+        ref:"member",
+        required:true
+    },
+    operationOnBook:{
+        type: String,
+        enum: ["reading", "borrowing"],
+        required: [true , "Value must be read OR borrow"],  
+    },
+    startOperation:{
+        type: Date, 
+        default: Date.now,
+    },
+    dateReturn:{
+        type: Date, 
+    },
+    isReturn:{
+        type:Boolean,
+        default:false
+    },
+    _id:false
+});
 schema.plugin(AutoIncrement, { id: "bookOperation_id", inc_field: "_id" });
 
 

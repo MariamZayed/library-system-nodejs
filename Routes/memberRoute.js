@@ -1,4 +1,5 @@
 const express = require("express");
+const router=express.Router();
 const controller = require("./../Controller/memberController");
 const upload = require("../Core/helper/uploadImage");
 const authorization = require("../Middleware/authorization");

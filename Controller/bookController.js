@@ -104,7 +104,6 @@ exports.getOneBook = (request, response, next) => {
     .catch((error) => next(error));
 };
 
-exports.getArrivalBook = (request, response, next) => {
 exports.getArrivalBook = (request, response,next) => {
   const date = new Date();
   const year = date.getFullYear();
