@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "f310238f-5459-4c0b-a083-14a2be80387b",
+		"name": "Book",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17742224"
+	},
+	"item": [
+		{
+			"name": "books",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IlJvb3QiLCJpYXQiOjE2ODAzMDIzNzEsImV4cCI6MTY4MDM4ODc3MX0.3FSqpq3hWw_OXl_ZfxgS1uG3TytJxhcKEIMJqeTkC3w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {}
+				},
+				"url": {
+					"raw": "http://localhost:8080/book",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "book",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IlJvb3QiLCJpYXQiOjE2ODAzMDIzNzEsImV4cCI6MTY4MDM4ODc3MX0.3FSqpq3hWw_OXl_ZfxgS1uG3TytJxhcKEIMJqeTkC3w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "title",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n    \"title\": \"gogogo\",\n    \"author\": \"asdfaadf\",\n    \"publisher\": \"akdhf\",\n    \"publishingDate\": \"2009-09-02\",\n    \"category\": \"Fantasy\",\n    \"edition\": 5,\n    \"pages\": 301,\n    \"totalNoOfCopies\": 25,\n    \"noOfBorrowedCopies\": 1,\n    \"noOfreadingCopies\": 0,\n    \"noOfAvailableCopies\": 24,\n    \"timesOfBorrowing\": 9,\n    \"timesOfReading\": 4,\n    \"available\": 1,\n    \"shelfNo\": 3,\n    \"arrivalDate\":\"2009-09-02\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/book?shelfNo=10&arrivalDate=02-12-2000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "may be you should speak to someone",
+							"disabled": true
+						},
+						{
+							"key": "author",
+							"value": "milly",
+							"disabled": true
+						},
+						{
+							"key": "publisher",
+							"value": "book juce",
+							"disabled": true
+						},
+						{
+							"key": "publishingDate",
+							"value": "02-12-2000",
+							"disabled": true
+						},
+						{
+							"key": "category",
+							"value": "Sci-fi",
+							"disabled": true
+						},
+						{
+							"key": "edition",
+							"value": "12",
+							"disabled": true
+						},
+						{
+							"key": "pages",
+							"value": "300",
+							"disabled": true
+						},
+						{
+							"key": "totalNoOfCopies",
+							"value": "20",
+							"disabled": true
+						},
+						{
+							"key": "noOfreadingCopies",
+							"value": "3",
+							"disabled": true
+						},
+						{
+							"key": "noOfAvailableCopies",
+							"value": "17",
+							"disabled": true
+						},
+						{
+							"key": "timesOfBorrowing",
+							"value": "10",
+							"disabled": true
+						},
+						{
+							"key": "timesOfReading",
+							"value": "5",
+							"disabled": true
+						},
+						{
+							"key": "available",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "shelfNo",
+							"value": "10"
+						},
+						{
+							"key": "arrivalDate",
+							"value": "02-12-2000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "book",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":1,\n    \"title\":\"testing\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/book",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "book",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":\"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/book",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"book"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reading book",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
