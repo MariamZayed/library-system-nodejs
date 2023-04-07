@@ -8,7 +8,7 @@ let basicSchema=mongoose.model("basicAdmins");
 let adminSchema=mongoose.model("admins");
 let employeeSchema=mongoose.model("employees");
 let memberSchema=mongoose.model("member");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 

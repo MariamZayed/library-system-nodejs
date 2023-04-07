@@ -1,7 +1,7 @@
 const mongoose=require("mongoose");
 require("../Model/basicAdminModel");
 const fs =require("fs") 
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const path = require("path");
 const saltRounds = 10
 const salt = bcrypt.genSaltSync(saltRounds);

@@ -4,7 +4,7 @@ const path = require("path");
 require("./../Model/memberModel");
 require("./../Model/BookModel");
 const memberSchema = mongoose.model("member");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const saltRound = 10;
 const salt = bcrypt.genSaltSync(saltRound);
 
