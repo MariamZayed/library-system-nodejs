@@ -9,18 +9,18 @@ const router = express.Router();
 router
   .route("/employee")
   .get(
-    authorization.checkEmpolyeeAdminandBasic,
+    // authorization.checkEmpolyeeAdminandBasic,
     employeeValidation.validateEmployee,
     controller.getAllEmployee
   )
   .post(
-    authorization.checkAdminAndBasicAdmin,
+    // authorization.checkAdminAndBasicAdmin,
     employeeValidation.validateEmployee,
     validateMW,
     controller.addEmployee
   )
   .patch(
-    authorization.checkEmpolyeeAdminandBasic,
+    // authorization.checkEmpolyeeAdminandBasic,
     upload("employees"),
     employeeValidation.validateEmployeeOptional,
     validateMW,
@@ -31,10 +31,20 @@ router
 router
   .route("/employee/:id")
   .delete(
-    authorization.checkEmpolyeeAdminandBasic,
+    // authorization.checkEmpolyeeAdminandBasic,
     employeeValidation.paramVal,
     validateMW,
     controller.deleteEmployee
+  );
+  
+  // get admin by id
+  router
+  .route("/employee/:id")
+  .get(
+    // authorization.checkEmpolyeeAdminandBasic,
+    employeeValidation.paramVal,
+    validateMW,
+    controller.getEmployeeByID
   );
 
 //search for firstName and lastName
