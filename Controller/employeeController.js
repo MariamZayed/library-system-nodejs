@@ -29,6 +29,20 @@ exports.getAllEmployee = (request, response, next) => {
   
 };
 
+exports.getEmployeeByID=(request,response,error)=>{
+  if (request.role != "empolyee" || (request.role == "empolyee" && request.body.id == request.id)){
+      EmployeeSchema.findOne({_id:request.params.id})
+      .then((data)=>{
+      if(data == null)
+          throw new Error("Id not found")
+      else
+          response.status(200).json({data}); 
+      }).catch ((error)=> {next(error)});
+  }else{
+      next(new Error("not have permission"))
+  }
+}
+
 //Add an Employee
 exports.addEmployee = (request, response, next) => {
   new EmployeeSchema({
