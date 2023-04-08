@@ -30,8 +30,8 @@ exports.getAllAdmins=(request,response, error)=>{
     }
 }
 
-exports.getAdminById=(request,response,error)=>{
-    if(request.role == "basicAdmin" || (request.role == "admin" && request.params.id == request.id)){
+exports.getAdminById=(request,response,next)=>{
+    // if(request.role == "basicAdmin" || (request.role == "admin" && request.params.id == request.id)){
         adminSchema.findOne({_id:request.params.id})
         .then((data)=>{
         if(data == null)
@@ -39,9 +39,10 @@ exports.getAdminById=(request,response,error)=>{
         else
             response.status(200).json({data}); 
         }).catch ((error)=> {next(error)});
-    }else{
-        next(new Error("not have permission"))
-    }
+    // }else{
+    //     console.log(request.role);
+    //     next(new Error("not have permission"))
+    // }
 }
 
 exports.addAdmin=async(request,response,next)=>{

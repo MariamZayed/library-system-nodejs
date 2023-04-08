@@ -48,7 +48,9 @@ router
   );
 
 //search for firstName and lastName
-router.route("/employee/search").get(authorization.checkEmpolyeeAdminandBasic,
-  employeeValidation.search,validateMW, controller.searchEmployee);
+router.route("/employee/search").get(
+  // authorization.checkEmpolyeeAdminandBasic,
+  employeeValidation.search,validateMW,
+  controller.searchEmployee);
 
 module.exports = router;
