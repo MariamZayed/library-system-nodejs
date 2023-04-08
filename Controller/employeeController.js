@@ -29,7 +29,7 @@ exports.getAllEmployee = (request, response, next) => {
   
 };
 
-exports.getEmployeeByID=(request,response,error)=>{
+exports.getEmployeeByID=(request,response,next)=>{
   if (request.role != "empolyee" || (request.role == "empolyee" && request.body.id == request.id)){
       EmployeeSchema.findOne({_id:request.params.id})
       .then((data)=>{
@@ -136,8 +136,9 @@ exports.updateEmployee = (request, response, next) => {
               lastName: request.body.lastName,
               email: request.body.email,
               salary: request.body.salary,
-              password: password,
+              password: bcrypt.hashSync(request.body.password, salt),
               birthDate: request.body.birthDate,
+              hireDate: request.body.hireDate,
               image: request.file?.filename ?? undefined,
             },
           }

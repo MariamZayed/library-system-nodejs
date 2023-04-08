@@ -52,7 +52,6 @@ exports.updateBasicAdmin=(request,response,next)=>{
     if(request.body.password){
         password = bcrypt.hashSync(request.body.password, salt);
     }
-
     basicAdminSchema.findOne({
         _id:request.body.id
     }).then((data)=>{
