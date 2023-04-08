@@ -69,6 +69,7 @@ exports.updateBasicAdmin=(request,response,next)=>{
             _id:request.body.id
         },{
             $set:{
+                firstName:request.body.firstName,
                 lastName:request.body.lastName,
                 password: password,
                 email:request.body.email,
