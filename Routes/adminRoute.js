@@ -8,11 +8,21 @@ const authorization = require("../Middleware/authorization");
 
 router
     .route("/admin")
-    .get(authorization.checkAdminAndBasicAdmin, controller.getAllAdmins)
-    .post(authorization.checkBasicAdmin, adminvalidation.post, validateMW ,controller.addAdmin)
-    .patch(authorization.checkAdminAndBasicAdmin, upload("admin"),adminvalidation.update ,validateMW ,controller.updateAdmin)
-    .delete(authorization.checkAdminAndBasicAdmin, adminvalidation.delete ,validateMW ,controller.deleteAdmin);
+    .get(
+        // authorization.checkAdminAndBasicAdmin,
+        controller.getAllAdmins)
+    .post(
+        // authorization.checkBasicAdmin,
+        adminvalidation.post, validateMW ,controller.addAdmin)
+    .patch(
+        // authorization.checkAdminAndBasicAdmin,
+        upload("admin"),adminvalidation.update ,validateMW ,controller.updateAdmin)
+    .delete(
+        // authorization.checkAdminAndBasicAdmin,
+        adminvalidation.delete ,validateMW ,controller.deleteAdmin);
 
-router.route("/admin/:id").get(authorization.checkAdminAndBasicAdmin, adminvalidation.getById, validateMW, controller.getAdminById);
+router.route("/admin/:id").get(
+    // authorization.checkAdminAndBasicAdmin,
+    adminvalidation.getById, validateMW, controller.getAdminById);
 
 module.exports = router;

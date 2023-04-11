@@ -19,6 +19,17 @@ exports.getAllBasicAdmins=(request,response)=>{
                 })
 }
 
+exports.getBasicAdminById=(request,response,next)=>{
+        basicAdminSchema.findOne({_id:request.params.id})
+        .then((data)=>{
+        if(!data)
+            throw new Error("Id not found")
+        else
+            response.status(200).json({data}); 
+        })
+        .catch ((error)=> {next(error)});
+}
+
 exports.addBasicAdmin=(request,response,next)=>{
     new basicAdminSchema({
         firstName:request.body.firstName,
@@ -41,7 +52,6 @@ exports.updateBasicAdmin=(request,response,next)=>{
     if(request.body.password){
         password = bcrypt.hashSync(request.body.password, salt);
     }
-
     basicAdminSchema.findOne({
         _id:request.body.id
     }).then((data)=>{
@@ -58,6 +68,7 @@ exports.updateBasicAdmin=(request,response,next)=>{
             _id:request.body.id
         },{
             $set:{
+                firstName:request.body.firstName,
                 lastName:request.body.lastName,
                 password: password,
                 email:request.body.email,

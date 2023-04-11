@@ -10,7 +10,7 @@ const validateMW = require("./../Core/Validation/validateMW");
 
 router
   .route("/member")
-  .all(authorization.checkEmpolyeeAdminandBasic)
+  // .all(authorization.checkEmpoly eeAdminandBasic)
   .get(controller.getAllMember)
   .post(memberValidation.postValidator, validateMW, controller.addMember)
   .patch(
@@ -25,7 +25,7 @@ router
 router
   .route("/member/:id")
   .get(
-    authorization.checkEmpolyeeAdminandBasic,
+    // authorization.checkEmpolyeeAdminandBasic,
     memberValidation.getByIdValidate,
     validateMW,
     controller.getMember
@@ -34,7 +34,7 @@ router
 router
   .route("/member/name/:name")
   .get(
-    authorization.checkEmpolyeeAdminandBasic,
+    // authorization.checkEmpolyeeAdminandBasic,
     memberValidation.getByNameValidate,
     validateMW,
     controller.getMemberbyName
@@ -43,7 +43,7 @@ router
 router
   .route("/member/email/:email")
   .get(
-    authorization.checkEmpolyeeAdminandBasic,
+    // authorization.checkEmpolyeeAdminandBasic,
     memberValidation.getByEmailValidate,
     validateMW,
     controller.getMemberbyemail

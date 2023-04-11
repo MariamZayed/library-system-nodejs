@@ -14,4 +14,8 @@ router
     .patch(upload("basicAdmin"),basicAdminvalidation.update ,validateMW ,controller.updateBasicAdmin)
     .delete(basicAdminvalidation.delete ,validateMW ,controller.deleteBasicAdmin);
 
+router
+    .route("/basicAdmin/:id")
+    .get(controller.getBasicAdminById);
+
 module.exports = router;
