@@ -1,0 +1,159 @@
+{
+	"info": {
+		"_postman_id": "5c90ac02-230d-4418-a57e-e3a9662e1933",
+		"name": "Basic Admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17742224"
+	},
+	"item": [
+		{
+			"name": "basic admins",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IlJvb3QiLCJpYXQiOjE2ODAzMDIzNzEsImV4cCI6MTY4MDM4ODc3MX0.3FSqpq3hWw_OXl_ZfxgS1uG3TytJxhcKEIMJqeTkC3w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/basicAdmin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"basicAdmin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "basic admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IlJvb3QiLCJpYXQiOjE2ODAzMDIzNzEsImV4cCI6MTY4MDM4ODc3MX0.3FSqpq3hWw_OXl_ZfxgS1uG3TytJxhcKEIMJqeTkC3w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\":\"Ahmed\",\n    \"lastName\":\"Zayed\",\n    \"password\":\"12121212\",\n    \"email\":\"bqq@gmail.com\",\n    \"birthdate\":\"12-02-2000\",\n    \"hiredate\":\"12-02-2000\",\n    \"salary\":\"20000\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/basicAdmin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"basicAdmin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "basic admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IlJvb3QiLCJpYXQiOjE2ODAzMDIzNzEsImV4cCI6MTY4MDM4ODc3MX0.3FSqpq3hWw_OXl_ZfxgS1uG3TytJxhcKEIMJqeTkC3w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/basicAdmin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"basicAdmin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "basic admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IlJvb3QiLCJpYXQiOjE2ODAzMDIzNzEsImV4cCI6MTY4MDM4ODc3MX0.3FSqpq3hWw_OXl_ZfxgS1uG3TytJxhcKEIMJqeTkC3w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":\"3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/basicAdmin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"basicAdmin"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

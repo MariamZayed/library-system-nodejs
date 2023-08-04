@@ -12,7 +12,8 @@ ITI 9 months nodejs project supervised by Eng. Eman Fathi
 6- Install mongoose <code>npm i mongoose</code> <br>. Any version but not 7.0.0 so to be compatible with mongoose-sequence lib <br>
 7- <code>npm i mongoose-sequence</code> to autoincreamnt id <br>
 8- Install bcrypt <code>npm i bcrypt</code> <br> to incode password<br>
-9- Instal fs <code>install i fs</code><br>
+9- Install fs <code>install i fs</code><br>
+10- Install jsonwebtoken<code>npm i jsonwebtoken</code><br>
 
 ### installing required packages
 

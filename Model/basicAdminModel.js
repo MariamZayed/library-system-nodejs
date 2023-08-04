@@ -1,13 +1,13 @@
-const mongoose=require("mongoose")
+const mongoose = require("mongoose")
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
-const Schema=new mongoose.Schema({
+const Schema = new mongoose.Schema({
     _id: Number,
     firstName:{
         type:String,
         validate: {
             validator: function (v) {
-            return /^[a-zA-Z0-9 ]*$/.test(v);
+            return /^[a-zA-Z]*$/.test(v);
             },
         message: "Please enter a valid name",
         },
@@ -18,7 +18,7 @@ const Schema=new mongoose.Schema({
         required: [true, "Title is required"],
         validate: {
             validator: function (v) {
-            return /^[a-zA-Z0-9 ]*$/.test(v);
+            return /^[a-zA-Z]*$/.test(v);
             },
             message: "Please enter a valid name",
         },
@@ -35,10 +35,29 @@ const Schema=new mongoose.Schema({
         'Please fill a valid email address'
         ],
     },
-    birthdate : { type:Date },
-    hireDate : { type:Date, require:true },
+    hiredate : { 
+        require:true,
+        type: String,
+        validate: {
+            validator: function (v) {
+            return /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/.test(v);
+            },
+            message: "Please enter a valid date",
+        },
+    },
+    birthdate : {
+        type: String,
+        validate: {
+            validator: function (v) {
+            return /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/.test(v);
+            },
+            message: "Please enter a valid date",
+        }, 
+    },
     image : { type:String },
-    salary : { type:Number, require:true }
+    salary : { type:Number, require:true },
+    isActivated:{type:Boolean,default: false},
+    isRoot: {type: Boolean, default: false}
 })
 
 Schema.plugin(AutoIncrement,{

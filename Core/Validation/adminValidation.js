@@ -12,6 +12,7 @@ exports.post = [
 
 exports.update = [
     body("id").isNumeric().withMessage("Id Shoud be Number"),
+    body("firstName").optional().isString().withMessage("First Name must be string"),
     body("lastName").optional().isString().withMessage("Last Name must be string"),
     body("password").optional().isLength({min: 8}).withMessage("Password Must be Min length 8"),
     body("email").optional().isEmail().withMessage("Invalid Email Format"),
@@ -23,3 +24,8 @@ exports.update = [
 exports.delete = [
     body("id").isNumeric().withMessage("Id Shoud be Number"),
 ]
+
+exports.getById = [
+    param("id").isNumeric().withMessage("Id Shoud be Number"),
+]
+
